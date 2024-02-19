@@ -3,28 +3,38 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { interval, of } from 'rxjs';
 import { DataService } from '../services/data.service';
+import { SqlService } from '../services/sql.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-hosings',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor,MatButtonModule],
   templateUrl: './hosings.component.html',
   styleUrl: './hosings.component.scss'
 })
 export class HosingsComponent {
 
-  hosings:string[] = ['紫金花园','河阳新村社区','紫金花园','河阳新村社区','紫金花园','河阳新村社区','紫金花园','河阳新村社区','紫金花园','河阳新村社区','紫金花园','河阳新村社区']
+  hosings:string[] = []
 
   @Output()
   buildings = new EventEmitter()
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService,private sql:SqlService,private router: Router) {}
+
+  ngOnInit(){
+    this.sql.getAllHosing().subscribe(res=>{
+      this.hosings = res
+    })
+  }
 
   onSelectHosing(hosing:string){
-    console.log(hosing)
-    of(hosing).subscribe(res=>{
-      this.buildings.emit(['1','2','3','5'])
-      this.dataService.building(['1','2','3','5'])
+    this.sql.getHosingBuildings(hosing).subscribe(res=>{
+      //导航
+      console.log(res)
+      const serializedArray = JSON.stringify(res);
+      this.dataService.setSharedData(res)
+      this.router.navigate(['/buildings'])
     })
   }
 }
