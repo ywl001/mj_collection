@@ -1,0 +1,32 @@
+<!-- 在你的组件模板中 -->
+<div class="data-entry-container">
+    <h2 class="title">添加小区</h2>
+
+    <div class="input-field">
+        <mat-form-field>
+          <input matInput placeholder="派出所名字" [matAutocomplete]="auto" [(ngModel)]="data.station">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let station of policeStations" [value]="station">
+              {{ station }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+    <div class="input-field">
+        <mat-form-field>
+            <input matInput placeholder="村庄或社区名字" [(ngModel)]="data.community">
+        </mat-form-field>
+    </div>
+
+    <div class="input-field">
+        <mat-form-field>
+            <input matInput placeholder="小区名字" [(ngModel)]="data.hosing_name">
+        </mat-form-field>
+    </div>
+
+    <div class="buttons">
+        <button mat-raised-button color="primary" (click)="onSubmit()">确定</button>
+        <button mat-raised-button color="warn" (click) = onCancel()>取消</button>
+    </div>
+</div>

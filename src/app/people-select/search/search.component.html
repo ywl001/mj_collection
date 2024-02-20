@@ -1,0 +1,9 @@
+<div class="root">
+    <mat-form-field class="keyword" appearance="outline">
+        <mat-label>{{label}}</mat-label>
+        <input matInput autocomplete="off" [(ngModel)] = keyword/>
+        <mat-icon *ngIf="isShowBtnClear" [svgIcon]="iconClear" matSuffix matTooltip="清除"
+             (click)=onclickBtnClear()></mat-icon>
+    </mat-form-field>
+    <div class="btn-search" (click) = onSumbit()></div>
+</div>

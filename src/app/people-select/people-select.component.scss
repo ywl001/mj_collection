@@ -1,0 +1,18 @@
+.root {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    .message{
+        font-size: 18px;
+        
+    }
+
+    .peoples{
+        display:flex;
+        flex-wrap: nowrap;
+        overflow-x:auto;
+    }
+
+}

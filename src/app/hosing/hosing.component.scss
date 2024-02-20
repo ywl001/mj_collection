@@ -1,0 +1,32 @@
+/* 在你的组件样式中或全局样式中 */
+
+.data-entry-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    /* 设置背景颜色 */
+    border-radius: 10px;
+    /* 添加圆角边框 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* 添加阴影效果 */
+
+    .title {
+        font-size: 24px;
+        /* 设置标题字体大小 */
+        margin-bottom: 20px;
+        /* 调整标题与输入框之间的间距 */
+    }
+
+    .input-field {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 15px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+}

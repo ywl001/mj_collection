@@ -2,15 +2,23 @@ import { Component, Input } from '@angular/core';
 import { Building } from '../building';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgFor } from '@angular/common';
+import { DataService } from '../services/data.service';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-building',
   standalone: true,
-  imports: [MatExpansionModule, NgFor],
-  templateUrl: './building.component.html',
-  styleUrl: './building.component.scss'
+  imports: [MatExpansionModule, NgFor,MatButtonModule],
+  templateUrl: './building-page.component.html',
+  styleUrl: './building-page.component.scss'
 })
 export class BuildingComponent {
+
+  constructor(private dataService: DataService, private router: Router,private location:Location) {
+    this.building = dataService.getRouteData('building')
+  }
 
   @Input()
   building: Building = {
@@ -41,6 +49,17 @@ export class BuildingComponent {
       }
     }
     return arr;
+  }
+
+  onBack(){
+    this.location.back()
+  }
+
+  onClickRoom(room){
+    
+    console.log(room)
+    this.router.navigate(['person'])
+    
   }
 
 }

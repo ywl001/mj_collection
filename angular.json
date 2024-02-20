@@ -67,7 +67,8 @@
               "buildTarget": "mj_collection:build:production"
             },
             "development": {
-              "buildTarget": "mj_collection:build:development"
+              "buildTarget": "mj_collection:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -1,0 +1,19 @@
+.root{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+
+    width: 100px;
+    height: 150px;
+
+    img{
+        height: 120px;
+        max-width: 100px;
+    }
+
+    .pname{
+        font-family: "Microsoft YaHei";
+    }
+}

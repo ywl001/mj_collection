@@ -1,0 +1,19 @@
+<!-- 在你的组件模板中 -->
+<div class="person-item">
+    <div class="photo">
+      <!-- 照片显示区域 -->
+      <img [src]="imgUrl" alt="Person Photo">
+    </div>
+    <div class="info">
+      <!-- 人员信息显示区域 -->
+      <div class="name">{{person?.name}}  {{person.telephone}}</div>
+      <div class="role">{{person.pid}}</div>
+      <div class="department">{{person.workplace}}</div>
+    </div>
+    <div class="actions">
+      <!-- 按钮区域 -->
+      <button>编辑</button>
+      <button>删除</button>
+    </div>
+  </div>
+  

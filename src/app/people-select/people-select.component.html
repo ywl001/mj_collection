@@ -1,0 +1,8 @@
+<div class="root">
+    <div class="message">{{message}}</div>
+    <app-add-new-people *ngIf="isShowAddPeople" [data]="newPeople" (cancelAddNew)="onCancelAddNew()" (addPeopleSuccess)="onSelectPeople($event)"></app-add-new-people>
+    <div class="peoples" *ngIf="isShowPeoples">
+        <app-people-item *ngFor="let item of queryPeoples" [data]="item" (selectPeople)="onSelectPeople($event)"></app-people-item>
+    </div>
+    <app-search (peoples)="onQueryComplete($event)" *ngIf="isShowQuery"></app-search>
+</div>

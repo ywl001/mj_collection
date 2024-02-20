@@ -1,0 +1,9 @@
+<div class="w100 flex">
+    <button mat-flat-button color="primary" class="flex-1" (click)="onBack()">返回</button>
+    <button mat-flat-button color="primary" class="flex-2">异常情况</button>
+</div>
+<app-people-select (selectedPeople)="onSelectPeople($event)"></app-people-select>
+<div style="margin-top: 20px;">
+    <app-home-person *ngFor="let item of persons" [person]="item"></app-home-person>
+</div>
+

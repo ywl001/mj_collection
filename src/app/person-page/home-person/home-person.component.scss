@@ -1,0 +1,38 @@
+/* 在你的组件样式中或全局样式中 */
+.person-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.photo {
+    flex-shrink: 0;
+    /* 不要缩小照片 */
+    margin-right: 10px;
+}
+
+.photo img {
+    width: 50px;
+    /* 调整照片的宽度 */
+    height: 50px;
+    /* 调整照片的高度 */
+    border-radius: 50%;
+    /* 圆形照片 */
+}
+
+.info {
+    flex-grow: 1;
+    /* 使信息区域填满剩余空间 */
+}
+
+.actions {
+    display: flex;
+    flex-shrink: 0;
+    /* 不要缩小按钮区域 */
+}
+
+.actions button {
+    margin-left: 5px;
+}
