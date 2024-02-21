@@ -4,7 +4,9 @@
         <button mat-flat-button color="primary" class="flex-2" (click)="onAddBuilding()">添加楼栋</button>
     </div>
     
+    
+    <h1 style="margin-top: 10px;">{{hosing.hosing_name}}</h1>
     <div class="line"></div>
     
-    <div *ngFor="let item of buildings" class="hosing" (click)="onSelectBuilding(item)">{{item.building_number}}</div>
+    <div *ngFor="let item of buildings" class="hosing" (click)="onSelectBuilding(item)">{{item.building_number}}号楼</div>
 </div>

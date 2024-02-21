@@ -19,6 +19,7 @@ export enum MessageType {
   clearSketchGraphic = 'clearSketchGraphic',
   uploadPhotoComplete='uploadPhotoComplete',
   addHosing = 'addHosing',
+  getUserInfo = 'getUserInfo'
   // closeDialog = 'closeDialog'
 }
 

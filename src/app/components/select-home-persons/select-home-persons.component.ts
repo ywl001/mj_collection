@@ -1,9 +1,10 @@
 import { NgFor } from '@angular/common';
 import { Component, Inject, ViewChild, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import {MatListModule, MatSelectionList} from '@angular/material/list';
-import { DataService } from '../services/data.service';
+import { DataService } from '../../services/data.service';
+import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-select-home-persons',
@@ -17,7 +18,7 @@ export class SelectHomePersonsComponent {
 
   @ViewChild(MatSelectionList) list:MatSelectionList
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: any,private dataService:DataService){
+  constructor(@Inject(MAT_DIALOG_DATA) data: any,private dataService:DataService,private dialogRef:MatDialogRef<SelectHomePersonsComponent>){
     this.homePeoples = data
   }
 
@@ -26,5 +27,6 @@ export class SelectHomePersonsComponent {
     const selectPersons = this.list.selectedOptions.selected.map(option => option.value);
     console.log('Selected Items:', selectPersons);
     this.dataService.selectPersons(selectPersons)
+    this.dialogRef.close();
   }
 }

@@ -1,15 +1,15 @@
 import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { People } from '../Person';
-import { SqlService } from '../services/sql.service';
+import { People } from '../../Person';
+import { SqlService } from '../../services/sql.service';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { TableName } from '../table';
 import {MatRadioModule} from '@angular/material/radio';
 import { NgFor } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TableName } from '../../app-type';
 
 @Component({
   selector: 'app-edit-person',
@@ -41,7 +41,6 @@ export class EditPersonComponent {
       work_place:this.person.work_place
     }
     this.sql.update(TableName.people,tableData,this.person.id).subscribe(res=>{
-      console.log(res);
       this.dialogRef.close();
     })
   }

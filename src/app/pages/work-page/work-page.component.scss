@@ -1,3 +1,8 @@
+.root{
+    height: 100%;
+    overflow: auto;
+}
+
 .list-item {
     background-color: #ffffff;
     border: 1px solid #e1e1e1;
@@ -7,8 +12,10 @@
     font-size: 16px;
     color: #333333;
     transition: background-color 0.3s ease;
-  }
-  
-  .list-item:hover {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-item:hover {
     background-color: #f2f2f2;
-  }
+}

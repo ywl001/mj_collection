@@ -1,0 +1,8 @@
+
+<button mat-flat-button color="primary" class="w100" (click)="back()">返回</button>
+<div class="root">
+    <div class="list-item" *ngFor="let item of works">
+        <span>{{item.hosing_name+item.building_number+'号楼'+item.room_number}}</span>
+        <span>{{item.insert_time.substring(0,11)}}</span>
+    </div>
+</div>

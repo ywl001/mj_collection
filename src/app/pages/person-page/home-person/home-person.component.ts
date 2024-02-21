@@ -1,9 +1,10 @@
 import { Component, Input, input } from '@angular/core';
-import { People } from '../../Person';
+
 import { MatDialog } from '@angular/material/dialog';
-import { EditPersonComponent } from '../../edit-person/edit-person.component';
-import { SqlService } from '../../services/sql.service';
-import { SelectHomePersonsComponent } from '../../select-home-persons/select-home-persons.component';
+import { People } from '../../../Person';
+import { EditPersonComponent } from '../../../components/edit-person/edit-person.component';
+import { SelectHomePersonsComponent } from '../../../components/select-home-persons/select-home-persons.component';
+import { SqlService } from '../../../services/sql.service';
 
 @Component({
   selector: 'app-home-person',
@@ -45,5 +46,4 @@ export class HomePersonComponent {
       this.dialog.open(SelectHomePersonsComponent,{data:res})
     })
   }
-
 }

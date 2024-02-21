@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>请选择异常原因</h2>
+<div mat-dialog-content>
+    <mat-radio-group [(ngModel)]="result_message">
+        <mat-radio-button class="example-radio-button" *ngFor="let type of error_reasons" [value]="type">
+            {{type}}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div mat-dialog-actions class="btn_container">
+    <button mat-raised-button color="accent" mat-dialog-close>取消</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">提交</button>
+</div>

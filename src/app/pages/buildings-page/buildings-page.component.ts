@@ -2,11 +2,13 @@ import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataService, MessageType } from '../services/data.service';
+import { DataService, MessageType } from '../../services/data.service';
 import { Location } from '@angular/common';
-import { SqlService } from '../services/sql.service';
-import { BuildingComponent } from '../building/building.component';
+import { SqlService } from '../../services/sql.service';
+import { BuildingComponent } from '../../components/building/building.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GVar } from '../../global-variables';
+import { User } from '../../User';
 
 @Component({
   selector: 'app-buildings',
@@ -19,14 +21,22 @@ export class BuildingsPageComponent {
 
   buildings = []
   hosingId;
+  hosing;
   constructor(private dataService: DataService,
     private router: Router,
+    private route:ActivatedRoute,
     private sql: SqlService,
     private dialog: MatDialog,
-    private location: Location, rout: ActivatedRoute) {
+    private location: Location) {
+      if(!User.id){
+        this.router.navigate([''])
+      }
     console.log('buildings construstor')
     // this.buildings = dataService.getRouteData('buildings')
-    this.hosingId = rout.snapshot.queryParams['hosingId']
+    // this.hosingId = this.route.snapshot.params['hosing_id']
+    this.hosing = GVar.current_hosing
+    console.log(this.hosing)
+    this.hosingId = this.hosing.id
     console.log(this.hosingId)
   }
 
@@ -41,13 +51,13 @@ export class BuildingsPageComponent {
 
   private getBuildings(hosingId) {
     this.sql.getHosingBuildings(hosingId).subscribe(res => {
+      console.log(res)
       this.buildings = res;
     })
   }
 
   onSelectBuilding(building: any) {
-    console.log(building.floor, building.unit_home)
-    // this.dataService.setRouteData('building', building)
+    GVar.current_building = building;
     this.router.navigate(['building'],{queryParams:building})
   }
   onBack() {

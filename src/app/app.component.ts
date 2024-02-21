@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { HosingsPageComponent } from './hosings-page/hosings-page.component';
+import { HosingsPageComponent } from './pages/hosings-page/hosings-page.component';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from './services/data.service';
 import { of } from 'rxjs';
 import { SqlService } from './services/sql.service';
-import { BuildingComponent } from './building-page/building-page.component';
-import { BuildingsPageComponent } from './buildings-page/buildings-page.component';
+import { BuildingComponent } from './pages/building-page/building-page.component';
+import { BuildingsPageComponent } from './pages/buildings-page/buildings-page.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Dialog } from '@angular/cdk/dialog';
+import { User } from './User';
 
 
 @Component({
@@ -27,25 +28,22 @@ import { Dialog } from '@angular/cdk/dialog';
 export class AppComponent {
   title = 'mj_collection';
 
-  private dialogRef
+  userName=''
 
   constructor(private dataService: DataService,
-    public dialog: Dialog,
-    private sql: SqlService) { }
+    private router:Router,
+    private sql: SqlService) { 
+    }
 
   ngOnInit() {
-    // this.getHosings()
+    this.dataService.message$.subscribe(res=>{
+      if(res== MessageType.getUserInfo){
+        this.userName = User.real_name.substring(0,1)
+      }
+    })
+  }
 
-  //   this.dataService.openDialog$.subscribe((res: any) => {
-  //     console.log(res)
-  //     this.dialogRef = this.dialog.open(res.component, {data:res.data});
-  //     this.dialogRef.componentInstance.data = res.data;
-  //   })
-
-  //   this.dataService.message$.subscribe(res=>{
-  //     if(res== MessageType.closeDialog){
-  //       this.dialogRef.close();
-  //     }
-  //   })
+  onGetUserWork(){
+      this.router.navigate(['/userwork'])
   }
 }

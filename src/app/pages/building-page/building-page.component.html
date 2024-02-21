@@ -1,9 +1,9 @@
 <div class="w100 flex">
     <button mat-flat-button color="primary" class="flex-1" (click)="onBack()">返回</button>
-    <button mat-flat-button color="primary" class="flex-2">添加楼栋</button>
+    <button mat-flat-button color="primary" class="flex-2">编辑楼栋</button>
 </div>
 
-<h2>title</h2>
+<h2>{{hosing.hosing_name}}{{building.building_number}}号楼</h2>
 <mat-accordion displayMode="flat">
     <mat-expansion-panel *ngFor="let unit of building.unit_home;index as i" (click)="onClickUnit(i)">
         <mat-expansion-panel-header>
@@ -12,6 +12,11 @@
             </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <div *ngFor="let item of unitRoomNumbers" class="list-item" (click)="onClickRoom(item);$event.stopPropagation();">{{item}}</div>
+        <div *ngFor="let item of unitRoomNumbers" class="list-item"
+            [style.background] = "getBgColor(item)"
+            (click)="onClickRoom(item);$event.stopPropagation();">
+            <span>{{item.room_number}}</span>
+            <span *ngIf="item.result_message"> {{item.result_message}}</span>
+        </div>
     </mat-expansion-panel>
 </mat-accordion>

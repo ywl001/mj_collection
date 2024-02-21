@@ -7,9 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { config } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { SqlService } from '../services/sql.service';
-import { TableName } from '../table';
-import { DataService, MessageType } from '../services/data.service';
+import { SqlService } from '../../services/sql.service';
+import { DataService, MessageType } from '../../services/data.service';
+import { TableName } from '../../app-type';
 
 @Component({
   selector: 'app-building',

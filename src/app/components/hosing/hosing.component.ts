@@ -6,10 +6,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SqlService } from '../services/sql.service';
-import { DataService, MessageType } from '../services/data.service';
+import { SqlService } from '../../services/sql.service';
+import { DataService, MessageType } from '../../services/data.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { TableName } from '../table';
+import { TableName } from '../../app-type';
 
 @Component({
   selector: 'app-hosing',
