@@ -18,7 +18,8 @@ export enum MessageType {
   addPoint = 'addPoint',
   clearSketchGraphic = 'clearSketchGraphic',
   uploadPhotoComplete='uploadPhotoComplete',
-  addHosing = 'addHosing'
+  addHosing = 'addHosing',
+  // closeDialog = 'closeDialog'
 }
 
 @Injectable({
@@ -26,10 +27,10 @@ export enum MessageType {
 })
 export class DataService {
 
-  private buildings = new Subject();
-  building$ = this.buildings.asObservable();
-  building(data: any) {
-    this.buildings.next(data);
+  private _selectPersons = new Subject<any[]>();
+  selectPersons$ = this._selectPersons.asObservable();
+  selectPersons(data: any[]) {
+    this._selectPersons.next(data);
   }
 
   private _message = new Subject<MessageType>();
@@ -38,19 +39,19 @@ export class DataService {
     this._message.next(m);
   }
 
-  private _openDialog = new Subject();
-  openDialog$ = this._openDialog.asObservable();
-  openDialog(component:ComponentType<any>,data:any) {
-    this._openDialog.next({component:component,data:data});
-  }
+  // private _openDialog = new Subject();
+  // openDialog$ = this._openDialog.asObservable();
+  // openDialog(component:ComponentType<any>,data:any) {
+  //   this._openDialog.next({component:component,data:data});
+  // }
 
-  private routeData: any={};
+  // private routeData: any={};
 
-  setRouteData(key:string,data: any): void {
-    this.routeData[key] = data;
-  }
+  // setRouteData(key:string,data: any): void {
+  //   this.routeData[key] = data;
+  // }
 
-  getRouteData(key:string): any {
-    return this.routeData[key];
-  }
+  // getRouteData(key:string): any {
+  //   return this.routeData[key];
+  // }
 }

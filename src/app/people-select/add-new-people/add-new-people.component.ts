@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import * as toastr from 'toastr';
+import toastr from 'toastr';
 import { People } from '../../Person';
 import { SqlService } from '../../services/sql.service';
 import { MatFormFieldModule } from '@angular/material/form-field';

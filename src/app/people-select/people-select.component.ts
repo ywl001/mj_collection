@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import * as toastr from 'toastr';
+import toastr from 'toastr';
 import { People } from '../Person';
 import { AddNewPeopleComponent } from './add-new-people/add-new-people.component';
 import { PeopleItemComponent } from './people-item/people-item.component';

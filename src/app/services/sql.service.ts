@@ -36,16 +36,27 @@ export class SqlService {
     const keyword = data.input;
     let sql:string;
     if(inputType == 1){
-      sql=`select dispinct on(p.id) sex, name,p.pid,father_id,mother_id,thumb_url from people p left join people_photo pp on p.id=pp.people_id where pid = '${keyword}'`
+      sql=`select dispinct on(p.id) sex, name,p.pid,p.telephone,p.work_place,thumb_url from people p left join people_photo pp on p.id=pp.people_id where pid = '${keyword}'`
     }else{
       // sql = `select * from people where match (name) AGAINST('${keyword}' IN BOOLEAN MODE)`
-      sql = `select p.id,sex, name,p.pid,father_id,mother_id,thumb_url from people p left join people_photo pp on p.id=pp.people_id where name = '${keyword}'`
+      sql = `select p.id,sex, name,p.pid,p.telephone,p.work_place,thumb_url from people p left join people_photo pp on p.id=pp.people_id where name = '${keyword}'`
     }
     console.log(sql)
     return this.execSql(sql, this.ACTION_SELECT).pipe(
       map(res=>this.uniqueArray(res)),
       map(res=>res.map(p=>People.toPeople(p)))
     );
+  }
+
+  getHomePeoples(pid){
+    const sql=`SELECT DISTINCT ON (p2.id) p2.name,p2.pid,p2.id,p2.telephone,p2.work_place, pp.thumb_url
+    FROM people p1
+    JOIN mj_people ph1 ON p1.id = ph1.people_id
+    JOIN mj_people ph2 ON ph1.home_number = ph2.home_number
+    JOIN people p2 ON ph2.people_id = p2.id
+    LEFT JOIN people_photo pp ON p2.id = pp.people_id
+    WHERE p1.id = ${pid};`
+    return this.execSql(sql,this.ACTION_SELECT)
   }
 
   insert(tableName:string, data:any) {

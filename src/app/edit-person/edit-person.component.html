@@ -1,0 +1,32 @@
+<div class="root">
+    <h2 mat-dialog-title>修改人员信息</h2>
+    <p>
+        <span>{{person.name}}</span>--<span>{{person.pid}}</span>
+    </p>
+
+    <div mat-dialog-content>
+        <mat-form-field>
+            <mat-label>电话号码</mat-label>
+            <input matInput [(ngModel)]=person.telephone>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>工作单位</mat-label>
+            <input matInput [(ngModel)]=person.work_place>
+        </mat-form-field>
+
+        <mat-radio-group [(ngModel)]="residence_type">
+            <mat-radio-button class="example-radio-button" *ngFor="let type of residence_types" [value]="type">
+                {{type}}
+            </mat-radio-button>
+        </mat-radio-group>
+
+        <mat-checkbox [(ngModel)]="is_host">房主</mat-checkbox>
+    </div>
+
+
+    <div mat-dialog-actions class="btn_container">
+        <button mat-raised-button color="accent" mat-dialog-close>取消</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">提交</button>
+    </div>
+</div>

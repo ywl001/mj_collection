@@ -1,0 +1,11 @@
+<h2 mai-dialog-title>选择同户人员</h2>
+<mat-selection-list #selectionList>
+    <mat-list-option *ngFor="let person of homePeoples" [value]="person">
+        {{person.name}}
+    </mat-list-option>
+</mat-selection-list>
+
+<div style="display: flex;justify-content: center;gap: 30px;">
+    <button mat-raised-button color="primary" (click)="onSubmit()">确定</button>
+    <button mat-raised-button color="warn" mat-dialog-close>取消</button>
+</div>

@@ -1,5 +1,22 @@
 <div class="root">
     <button mat-flat-button color="primary" class="w100" (click)="onAddHosing()">添加小区</button>
     <div class="line"></div>
-    <div *ngFor="let item of hosings" class="hosing" (click)="onSelectHosing(item)">{{item.hosing_name}}</div>
+    <!-- <div *ngFor="let item of hosings" class="hosing" (click)="onSelectHosing(item)">
+        <div></div>
+        {{item.hosing_name}}
+        
+    </div> -->
+
+    <!-- <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)">
+        <p>{{item.hosing_name}}</p>
+        <button>按钮</button>
+    </div> -->
+
+    <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)">
+        <div >{{item.hosing_name}}</div>
+        <button class="edit-button" (click)="onEditHosing(item);$event.stopPropagation();">
+            <!-- 使用编辑图标，这里可以替换为你的编辑图标 -->
+            <img src="../../assets/edit.png" alt="Edit">
+        </button>
+    </div>
 </div>

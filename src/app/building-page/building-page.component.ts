@@ -3,7 +3,7 @@ import { Building } from '../building';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgFor } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -16,8 +16,12 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class BuildingComponent {
 
-  constructor(private dataService: DataService, private router: Router,private location:Location) {
-    this.building = dataService.getRouteData('building')
+  constructor(private dataService: DataService, private router: Router,private location:Location,route:ActivatedRoute) {
+    // this.building = dataService.getRouteData('building')
+    let v:any = Object.assign({},route.snapshot.queryParams)
+    v.unit_home = JSON.parse(v.unit_home)
+
+    this.building = v;
   }
 
   @Input()
@@ -58,7 +62,8 @@ export class BuildingComponent {
   onClickRoom(room){
     
     console.log(room)
-    this.router.navigate(['person'])
+    //导航到person-page,building-id,room-number
+    this.router.navigate(['person'],{queryParams:{building_id:this.building.id,room_number:room}})
     
   }
 

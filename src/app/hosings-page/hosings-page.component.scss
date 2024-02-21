@@ -1,13 +1,60 @@
-.root{
+.root {
     display: flex;
     flex-wrap: wrap;
-    .hosing {
-        max-width: 100px;
-        text-align: center;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 10px;
+
+    // .hosing {
+    //     max-width: 100px;
+    //     text-align: center;
+    //     padding: 10px;
+    //     border: 1px solid #ccc;
+    //     border-radius: 5px;
+    //     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    //     margin: 10px;
+    // }
+}
+
+.rounded-rectangle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #3498db;
+    /* 你想要的背景颜色 */
+    color: #ffffff;
+    /* 文字颜色 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* 阴影效果 */
+    // margin-right: 10px;
+    margin: 5px;
+}
+
+.rounded-rectangle div {
+    flex-grow: 1;
+    /* 文字占据剩余空间 */
+    margin-right: 10px;
+    /* 右边距离按钮的距离 */
+}
+
+.edit-button {
+    // padding: 10px;
+    background-color: #2ecc71;
+    /* 按钮背景颜色 */
+    border: none;
+    border-radius: 20px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* 添加过渡效果 */
+
+    /* 鼠标悬停时改变背景颜色 */
+    &:hover {
+        background-color: #27ae60;
     }
+}
+
+.edit-button img {
+    width: 20px;
+    /* 图标宽度，根据需要调整 */
+    height: 20px;
+    /* 图标高度，根据需要调整 */
 }

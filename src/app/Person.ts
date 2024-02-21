@@ -14,7 +14,7 @@ export class People {
     birthday?: string;
     sex?: string;
     telephone?: string;
-    workplace?:string;
+    work_place?:string;
 
     static male = '男'
     static female = '女'

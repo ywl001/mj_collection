@@ -3,7 +3,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import {MatFormFieldModule} from '@angular/material/form-field';
 // import * as IDValidator from 'id-validator';
-import * as toastr from 'toastr';
+import toastr from 'toastr';
 // import * as pinyin from 'pinyin';
 import { SqlService } from '../../services/sql.service';
 import { People } from '../../Person';
@@ -40,7 +40,7 @@ export class SearchComponent {
   // iconPeople = 'iconPeople';
   // iconLocation = 'iconLocation'
 
-  private _keyword: string='';
+  private _keyword: string='姚伟立';
   public get keyword(): string {
     return this._keyword;
   }

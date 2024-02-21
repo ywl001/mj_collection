@@ -1,26 +1,26 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Injector } from '@angular/core';
+import { Component, Inject, Injector } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SqlService } from '../services/sql.service';
 import { DataService, MessageType } from '../services/data.service';
-import { Dialog } from '@angular/cdk/dialog';
-// import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TableName } from '../table';
 
 @Component({
   selector: 'app-hosing',
   standalone: true,
-  imports: [MatFormFieldModule,
+  imports: [
+    MatDialogModule,
+    MatFormFieldModule,
     FormsModule,
     NgIf, NgFor,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule,
     MatAutocompleteModule],
   templateUrl: './hosing.component.html',
   styleUrl: './hosing.component.scss'
@@ -29,8 +29,15 @@ export class HosingComponent {
   data: any = {};
 
   constructor(private sql: SqlService,
-    private injector: Injector,
-    private dataService: DataService) { }
+    @Inject(MAT_DIALOG_DATA) data: any,
+    private dialogRef: MatDialogRef<HosingComponent>,
+    // private dialog:MatDialog,
+    private dataService: DataService) {
+    // console.log(data)
+    if (data)
+      this.data = data;
+
+  }
 
   policeStations = [
     '城关派出所',
@@ -48,16 +55,16 @@ export class HosingComponent {
   ]
 
   onSubmit() {
-    this.sql.insert('collect_hosing', this.data).subscribe(res => {
-      this.dataService.sendMessage(MessageType.addHosing);
-      // this.dialogRef.close()
-      const dialogRef = this.injector.get(MatDialogRef, null);
-      dialogRef.close()
-    })
-  }
-
-  onCancel() {
-    const dialogRef = this.injector.get(MatDialogRef, null);
-      dialogRef.close()
+    if (!this.data.id) {
+      this.sql.insert('collect_hosing', this.data).subscribe(res => {
+        this.dataService.sendMessage(MessageType.addHosing);
+        this.dialogRef.close()
+      })
+    } else {
+      this.sql.update(TableName.collect_hosing, this.data, this.data.id).subscribe(res => {
+        // this.dataService.sendMessage(MessageType.closeDialog)
+        this.dialogRef.close()
+      })
+    }
   }
 }

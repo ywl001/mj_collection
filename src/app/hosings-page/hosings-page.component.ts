@@ -6,6 +6,7 @@ import { DataService, MessageType } from '../services/data.service';
 import { SqlService } from '../services/sql.service';
 import { MatButtonModule } from '@angular/material/button';
 import { HosingComponent } from '../hosing/hosing.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-hosings',
@@ -21,7 +22,10 @@ export class HosingsPageComponent {
   @Output()
   buildings = new EventEmitter()
 
-  constructor(private dataService: DataService, private sql: SqlService, private router: Router) { }
+  constructor(private dataService: DataService,
+    private dialog:MatDialog,
+     private sql: SqlService, 
+     private router: Router) { }
 
   ngOnInit() {
     this.getAllHosing();
@@ -38,16 +42,19 @@ export class HosingsPageComponent {
     })
   }
 
-  onSelectHosing(hosing: string) {
-    this.sql.getHosingBuildings(hosing).subscribe(res => {
-      //导航
-      console.log(res)
-      this.dataService.setRouteData('buildings', res)
-      this.router.navigate(['/buildings'])
-    })
+  onSelectHosing(hosing: any) {
+    console.log(hosing)
+    this.router.navigate(['/buildings'],{queryParams:{hosingId:hosing.id}})
   }
 
   onAddHosing() {
-    this.dataService.openDialog(HosingComponent, null)
+    // this.dataService.openDialog(HosingComponent, null)
+    this.dialog.open(HosingComponent,null)
+  }
+
+  onEditHosing(hosing){
+    console.log(hosing)
+    this.dialog.open(HosingComponent,{data:hosing})
+    // this.dataService.openDialog(HosingComponent, hosing)
   }
 }

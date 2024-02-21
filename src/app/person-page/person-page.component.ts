@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../services/data.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { Location, NgFor } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { PeopleSelectComponent } from '../people-select/people-select.component';
@@ -17,9 +17,17 @@ import { HomePersonComponent } from './home-person/home-person.component';
 export class PersonPageComponent {
 
   persons: People[] = [];
-  
 
-  constructor(private dataService: DataService, private router: Router, private location: Location) {
+  building_id;
+  room_number;
+  
+  constructor(private dataService: DataService, 
+    private router: Router, 
+    private route:ActivatedRoute,
+    private location: Location) {
+    this.building_id = route.snapshot.queryParams['building_id'];
+    this.room_number = route.snapshot.queryParams['room_number'];
+    console.log('person-page',this.building_id,this.room_number)
   }
 
   onSelectPeople(p) {
@@ -27,7 +35,21 @@ export class PersonPageComponent {
       //人员已经存在
     }else{
       this.persons.unshift(p)
+      //插入住所信息，工作信息
     }
+  }
+
+  ngOnInit(){
+    //选择同户人员的结果
+    this.dataService.selectPersons$.subscribe((res:any)=>{
+      console.log('sss',res)
+      this.persons = this.persons.concat(res)
+    })
+  }
+
+  //获取房间人员
+  private getRoomPeoples(){
+
   }
 
   checkPersonIsExist(p) {
