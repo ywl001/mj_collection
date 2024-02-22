@@ -23,12 +23,13 @@
 }
 
 .info {
-    flex-grow: 1;
+    flex: 1;
     /* 使信息区域填满剩余空间 */
 }
 
 .actions {
     display: flex;
+    flex-direction: column;
     flex-shrink: 0;
     /* 不要缩小按钮区域 */
 }

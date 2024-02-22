@@ -1,15 +1,19 @@
-import { Component, Input, input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, input } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { People } from '../../../Person';
 import { EditPersonComponent } from '../../../components/edit-person/edit-person.component';
 import { SelectHomePersonsComponent } from '../../../components/select-home-persons/select-home-persons.component';
 import { SqlService } from '../../../services/sql.service';
+import Swal from 'sweetalert2';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { TableName } from '../../../app-type';
+import { DataService, MessageType } from '../../../services/data.service';
 
 @Component({
   selector: 'app-home-person',
   standalone: true,
-  imports: [],
+  imports: [SweetAlert2Module],
   templateUrl: './home-person.component.html',
   styleUrl: './home-person.component.scss'
 })
@@ -34,7 +38,17 @@ export class HomePersonComponent {
     }
   }
 
-  constructor(private dialog:MatDialog,private sql:SqlService){}
+  getBgColor(){
+    if(this.person.is_host){
+      return 'PaleGreen'
+    }
+    return null;
+  }
+
+  constructor(private dialog:MatDialog,
+    private cdr:ChangeDetectorRef,
+    private sql:SqlService,
+    private dataService:DataService){}
 
   onEditPerson(){
     this.dialog.open(EditPersonComponent,{data:this.person})
@@ -44,6 +58,32 @@ export class HomePersonComponent {
     this.sql.getHomePeoples(this.person.id).subscribe(res=>{
       console.log(res)
       this.dialog.open(SelectHomePersonsComponent,{data:res})
+    })
+  }
+
+  onDelPerson(){
+    Swal.fire({
+      title: "确定要删除吗?",
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText:'取消'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //删除人员
+        console.log(this.person.pb_id)
+        this.sql.delete(TableName.person_building,this.person.pb_id).subscribe(res=>{
+          console.log(res)
+          this.dataService.sendMessage(MessageType.delPersonFromBuilding)
+        })
+      } 
+    });
+  }
+
+  onSetHomeHost(){
+    const tableData={is_host:1}
+    this.sql.update(TableName.person_building,tableData,this.person.pb_id).subscribe(res=>{
+      this.person.is_host = 1
+      console.log('房主ok')
     })
   }
 }

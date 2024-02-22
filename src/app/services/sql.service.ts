@@ -42,10 +42,13 @@ export class SqlService {
     const keyword = data.input;
     let sql: string;
     if (inputType == 1) {
-      sql = `select dispinct on(p.id) sex, name,p.pid,p.telephone,p.work_place,thumb_url from people p left join people_photo pp on p.id=pp.people_id where pid = '${keyword}'`
-    } else {
+      sql = `select distinct on (p.id) p.id,sex, name,p.pid,p.telephone,p.work_place,thumb_url 
+      from people p left join people_photo pp on p.id=pp.people_id where p.pid = '${keyword}'`
+    } else if(inputType == 2) {
       // sql = `select * from people where match (name) AGAINST('${keyword}' IN BOOLEAN MODE)`
       sql = `select p.id,sex, name,p.pid,p.telephone,p.work_place,thumb_url from people p left join people_photo pp on p.id=pp.people_id where name = '${keyword}'`
+    } else if(inputType == 3){
+      sql = `select distinct on(p.id) sex, name,p.pid,p.telephone,p.work_place,thumb_url from people p left join people_photo pp on p.id=pp.people_id where telephone = '${keyword}'`
     }
     console.log(sql)
     return this.execSql(sql, this.ACTION_SELECT).pipe(
@@ -66,9 +69,10 @@ export class SqlService {
   }
 
   getRoomPeoples(building_id, room_number) {
-    const sql = `SELECT DISTINCT on(p.id) p.id,p.name,p.telephone,p.work_place,pp.thumb_url 
-    from people p,collect_building_person bp,people_photo pp 
-    where p.id=bp.person_id and p.id=pp.people_id and bp.building_id = ${building_id} and bp.room_number='${room_number}'`
+    const sql = `	SELECT DISTINCT on(p.id) p.id,p.pid,p.name,p.telephone,p.work_place,pp.thumb_url,bp.id pb_id,bp.is_host 
+    from collect_building_person bp LEFT JOIN people p on bp.person_id = p.id 
+    LEFT JOIN people_photo pp on pp.people_id = p.id
+    where bp.building_id = ${building_id} and bp.room_number='${room_number}'`
     console.log(sql)
     return this.execSql(sql, this.ACTION_SELECT)
   }

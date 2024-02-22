@@ -6,6 +6,14 @@
 
 <h1>{{hosingName+buildingName+room_number}}</h1>
 
+<mat-radio-group [(ngModel)]="residence_type" style="margin-bottom: 30px;">
+    <mat-radio-button class="example-radio-button" *ngFor="let type of residence_types" [value]="type">
+        {{type}}
+    </mat-radio-button>
+</mat-radio-group>
+
+<div class="line" style="margin-bottom: 20px;"></div>
+
 <app-people-select (selectedPeople)="onSelectPeople($event)"></app-people-select>
 <div style="margin-top: 20px;">
     <app-home-person *ngFor="let item of persons" [person]="item"></app-home-person>

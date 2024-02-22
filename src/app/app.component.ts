@@ -6,11 +6,12 @@ import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from './services/data.service';
 import { of } from 'rxjs';
 import { SqlService } from './services/sql.service';
-import { BuildingComponent } from './pages/building-page/building-page.component';
+import { BuildingPageComponent } from './pages/building-page/building-page.component';
 import { BuildingsPageComponent } from './pages/buildings-page/buildings-page.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Dialog } from '@angular/cdk/dialog';
 import { User } from './User';
+import { LongPressDirective } from './longpress';
 
 
 @Component({
@@ -21,7 +22,9 @@ import { User } from './User';
     MatDialogModule,
     HosingsPageComponent,
     NgIf, NgFor,
-    BuildingsPageComponent],
+    BuildingsPageComponent,
+    LongPressDirective,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -46,4 +49,5 @@ export class AppComponent {
   onGetUserWork(){
       this.router.navigate(['/userwork'])
   }
+
 }

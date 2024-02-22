@@ -26,6 +26,10 @@ export class LocalStorgeService {
     this.localStorage.removeItem(key);
   }
 
+  public clear(){
+    this.localStorage.clear();
+  }
+
   /**删除包含关键字的所有键 */
   public remove2(keyword: string) {
     Object.keys(this.localStorage).forEach((item) => {

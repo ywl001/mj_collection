@@ -1,5 +1,5 @@
 <!-- 在你的组件模板中 -->
-<div class="person-item">
+<div class="person-item" [style.background]="getBgColor()">
     <div class="photo">
       <!-- 照片显示区域 -->
       <img [src]="imgUrl" alt="Person Photo">
@@ -12,9 +12,15 @@
     </div>
     <div class="actions">
       <!-- 按钮区域 -->
-      <button (click)="onEditPerson()">编辑</button>
-      <button>删除</button>
-      <button (click)="onGetHomePeoples()">获取同户人员</button>
+      <div>
+        <button (click)="onEditPerson()">编辑</button>
+        <button (click)="onDelPerson()">删除</button>
+      </div>
+      <div>
+        <button (click)="onGetHomePeoples()">同户</button>
+        <button (click)="onSetHomeHost()">房主</button>
+      </div>
+      
     </div>
   </div>
   

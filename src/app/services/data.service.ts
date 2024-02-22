@@ -6,7 +6,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 
 export enum MessageType {
-  closeInfowindow = 'closeInfoWindow',
+  delPersonFromBuilding = 'delPersonFromBuilding',
   startPickMapPoint = 'startMove',
   refreshMark = 'refreshMark',
   clickMap = 'clickMap',
@@ -15,7 +15,7 @@ export enum MessageType {
   saveLocation = "saveLocation",
   changeLayer = 'changeLayer',
   addBuilding = 'addBuilding',
-  addPoint = 'addPoint',
+  editBuilding = 'editBuilding',
   clearSketchGraphic = 'clearSketchGraphic',
   uploadPhotoComplete='uploadPhotoComplete',
   addHosing = 'addHosing',

@@ -1,7 +1,7 @@
 import { NgFor } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { interval, of } from 'rxjs';
+import { Subscription, interval, of } from 'rxjs';
 import { DataService, MessageType } from '../../services/data.service';
 import { SqlService } from '../../services/sql.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +9,12 @@ import { HosingComponent } from '../../components/hosing/hosing.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
+import { LongPressDirective } from '../../longpress';
 
 @Component({
   selector: 'app-hosings',
   standalone: true,
-  imports: [NgFor, MatButtonModule],
+  imports: [NgFor, MatButtonModule,LongPressDirective],
   templateUrl: './hosings-page.component.html',
   styleUrl: './hosings-page.component.scss'
 })
@@ -34,13 +35,19 @@ export class HosingsPageComponent {
       }
   }
 
+  private sub1:Subscription
   ngOnInit() {
     this.getAllHosing();
-    this.dataService.message$.subscribe(res => {
+    this.sub1 = this.dataService.message$.subscribe(res => {
       if (res == MessageType.addHosing) {
         this.getAllHosing();
       }
     })
+  }
+
+  ngOnDestroy(){
+    if(this.sub1)
+      this.sub1.unsubscribe();
   }
 
   private getAllHosing() {
@@ -64,5 +71,10 @@ export class HosingsPageComponent {
     console.log(hosing)
     this.dialog.open(HosingComponent, { data: hosing })
     // this.dataService.openDialog(HosingComponent, hosing)
+  }
+
+  onLongPress(hosing){
+    console.log('edit hosing')
+    this.dialog.open(HosingComponent, { data: hosing })
   }
 }

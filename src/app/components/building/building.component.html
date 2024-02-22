@@ -6,23 +6,28 @@
 <div mat-dialog-content style="display: flex; flex-direction: column; align-items: center;">
 
     <mat-form-field>
-        <input matInput placeholder="楼号" [(ngModel)]="data.building_number">
+        <mat-label>楼号:</mat-label>
+        <input matInput [(ngModel)]="data.building_number">
     </mat-form-field>
 
     <mat-form-field>
-        <input matInput placeholder="层数" type="number" [(ngModel)]="data.floor">
-    </mat-form-field>
-
-    <mat-form-field>
-        <input matInput placeholder="单元数" type="number" [(ngModel)]="countUint">
+        <mat-label>楼层数:</mat-label>
+        <input matInput type="number" [(ngModel)]="data.floor">
     </mat-form-field>
 
     <mat-form-field *ngIf="isNormal">
-        <input matInput placeholder="每单元单层户数" type="number" [(ngModel)]="countHome">
+        <mat-label>单元数:</mat-label>
+        <input matInput type="number" [(ngModel)]="countUint">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isNormal">
+        <mat-label>每单元单层户数:</mat-label>
+        <input matInput type="number" [(ngModel)]="countHome">
     </mat-form-field>
 
     <mat-form-field *ngIf="!isNormal">
-        <input matInput placeholder="请顺序填写单层单元户数" [(ngModel)]="unitArray">
+        <mat-label>顺序填写单层单元户数:</mat-label>
+        <input matInput  [(ngModel)]="unitArray">
     </mat-form-field>
 
 </div>

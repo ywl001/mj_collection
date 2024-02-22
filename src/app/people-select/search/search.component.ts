@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 // import * as IDValidator from 'id-validator';
 import toastr from 'toastr';
 // import * as pinyin from 'pinyin';
@@ -9,7 +9,7 @@ import { SqlService } from '../../services/sql.service';
 import { People } from '../../Person';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
 const iconClear = `<svg t="1685117430288" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5533" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M958.358489 152.199401l-89.399099-89.430822L511.17368 420.522566 153.388994 62.768579 63.988872 152.199401l357.785709 357.753987L63.988872 867.708398l89.400123 89.430822L511.17368 599.38421l357.785709 357.753987 89.399099-89.430822L600.573803 509.953388 958.358489 152.199401z" fill="#666666" p-id="5534"></path></svg>`
 const iconClear_over = `<svg t="1685117430288" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5533" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M958.358489 152.199401l-89.399099-89.430822L511.17368 420.522566 153.388994 62.768579 63.988872 152.199401l357.785709 357.753987L63.988872 867.708398l89.400123 89.430822L511.17368 599.38421l357.785709 357.753987 89.399099-89.430822L600.573803 509.953388 958.358489 152.199401z" fill="#d4237a" p-id="5534"></path></svg>`
@@ -23,15 +23,16 @@ const enum IconName {
 
 const enum InputType {
   pid = 1,
-  name = 2
+  name = 2,
+  tel = 3
 }
 
-declare var IDValidator;
+// declare var IDValidator;
 
 @Component({
   selector: 'app-search',
-  standalone:true,
-  imports:[MatIconModule,FormsModule,MatFormFieldModule,NgIf,MatInputModule],
+  standalone: true,
+  imports: [MatIconModule, FormsModule, MatFormFieldModule, NgIf, MatInputModule],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
@@ -40,15 +41,15 @@ export class SearchComponent {
   // iconPeople = 'iconPeople';
   // iconLocation = 'iconLocation'
 
-  private _keyword: string='姚伟立';
+  private _keyword: string = '';
   public get keyword(): string {
     return this._keyword;
   }
   public set keyword(value: string) {
     this._keyword = value;
     this.isShowBtnClear = value.length > 2;
-    if(value.length == 18 ){
-      if(!People.isPid(value)){
+    if (value.length == 18) {
+      if (!People.isPid(value)) {
         toastr.error('输入的身份证号有误')
       }
     }
@@ -101,19 +102,22 @@ export class SearchComponent {
       console.log('身份证号')
       data.inputType = InputType.pid
       p.pid = keyword;
+    }else if(this.isPhone(keyword)){
+      data.inputType = InputType.tel
+      p.telephone = keyword
     }
 
     data.input = keyword;
     console.log(data.inputType)
-    if(data.inputType){
+    if (data.inputType) {
       this.sql.getPeople(data).subscribe(
         res => {
           res.push(p)
           this.peoples.emit(res);
-          this.keyword=''
+          this.keyword = ''
         }
       )
-    }else{
+    } else {
       this.peoples.emit([])
     }
   }
@@ -132,6 +136,11 @@ export class SearchComponent {
   onRemoveHistoryItme(option: string) {
     const index = this.historys.indexOf(option);
     this.historys.splice(index, 1);
+  }
+
+  private isPhone(phoneNumber) {
+    const phoneRegex = /^1[3456789]\d{9}$/;
+    return phoneRegex.test(phoneNumber);
   }
 
   private regiteIcon(sanitizer: DomSanitizer, iconRegistry: MatIconRegistry) {

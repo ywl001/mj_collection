@@ -9,6 +9,7 @@ import { BuildingComponent } from '../../components/building/building.component'
 import { MatDialog } from '@angular/material/dialog';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-buildings',
@@ -40,13 +41,18 @@ export class BuildingsPageComponent {
     console.log(this.hosingId)
   }
 
+  private sub1:Subscription
   ngOnInit(): void {
     this.getBuildings(this.hosingId);
-    this.dataService.message$.subscribe(res => {
+    this.sub1 = this.dataService.message$.subscribe(res => {
       if (res == MessageType.addBuilding) {
         this.getBuildings(this.hosingId);
       }
     })
+  }
+
+  ngOnDestroy(){
+    this.sub1.unsubscribe();
   }
 
   private getBuildings(hosingId) {

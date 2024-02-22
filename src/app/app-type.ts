@@ -24,6 +24,7 @@ export interface Work {
     result_message?: string
     user_id?: number
     insert_time?: number
+    use_for?:string
 }
 
 export interface Hosing {

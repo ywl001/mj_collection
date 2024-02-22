@@ -2,13 +2,16 @@ import { Component, Input } from '@angular/core';
 import { Building, Hosing } from '../../app-type';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { NgFor, NgIf } from '@angular/common';
-import { DataService } from '../../services/data.service';
+import { DataService, MessageType } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { SqlService } from '../../services/sql.service';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
+import { MatDialog } from '@angular/material/dialog';
+import { BuildingComponent } from '../../components/building/building.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-building',
@@ -17,12 +20,14 @@ import { User } from '../../User';
   templateUrl: './building-page.component.html',
   styleUrl: './building-page.component.scss'
 })
-export class BuildingComponent {
+export class BuildingPageComponent {
 
-  constructor(private dataService: DataService,
+  constructor(
     private router: Router,
     private sql: SqlService,
     private location: Location,
+    private dialog:MatDialog,
+    private dataService:DataService,
     route: ActivatedRoute) {
       if(!User.id){
         this.router.navigate([''])
@@ -42,15 +47,28 @@ export class BuildingComponent {
 
   getBgColor(item): string {
     if (item.result == 1) {
-      return 'green'
+      return 'lightgreen'
     } else if (item.result == 0) {
       return 'red'
     }
     return 'white'
   }
 
+  private sub1:Subscription
   ngOnInit() {
     this.getBuildingInfo()
+    this.sub1 = this.dataService.message$.subscribe(res=>{
+      if(res == MessageType.editBuilding){
+        console.log('编辑楼栋后刷新')
+        this.getBuildingInfo();
+      }
+    })
+  }
+
+  ngOnDestroy(){
+    if(this.sub1){
+      this.sub1.unsubscribe();
+    }
   }
 
   private numToArray(num) {
@@ -67,7 +85,12 @@ export class BuildingComponent {
     let arr = [];
     for (let i = 0; i < this.building.floor; i++) {
       for (let j = 0; j < countHome; j++) {
-        const roomNumber = `${unit + 1}-${i + 1}0${j + 1}`;
+        let roomNumber;
+        if(j<10){
+          roomNumber = `${unit + 1}-${i + 1}0${j + 1}`;
+        }else{
+          roomNumber = `${unit + 1}-${i + 1}${j + 1}`;
+        }
         let a: any = {};
         a.room_number = roomNumber;
 
@@ -98,6 +121,11 @@ export class BuildingComponent {
   onClickRoom(room) {
     //导航到person-page,building-id,room-number
     this.router.navigate(['person'], { queryParams: { building_id: this.building.id, room_number: room.room_number } })
+  }
+
+  onEditBuilding(){
+    const data = Object.assign({},this.building,{hosingId:this.hosing.id})
+    this.dialog.open(BuildingComponent,{data:this.building})
   }
 
 }

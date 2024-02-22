@@ -12,11 +12,7 @@
         <button>按钮</button>
     </div> -->
 
-    <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)">
-        <div >{{item.hosing_name}}</div>
-        <button class="edit-button" (click)="onEditHosing(item);$event.stopPropagation();">
-            <!-- 使用编辑图标，这里可以替换为你的编辑图标 -->
-            <img src="../../assets/edit.png" alt="Edit">
-        </button>
+    <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)" longPress (mouseLongPress)="onLongPress(item)">
+        {{item.hosing_name}}
     </div>
 </div>

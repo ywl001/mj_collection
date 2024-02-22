@@ -4,6 +4,7 @@ import { User } from '../../User';
 import { CommonModule, NgFor, Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { LocalStorgeService } from '../../services/local-storge.service';
 
 @Component({
   selector: 'app-work-page',
@@ -19,6 +20,7 @@ export class WorkPageComponent {
 
   constructor(private sql: SqlService,
     private location: Location,
+    private local:LocalStorgeService,
     private router: Router) {
     if (!User.id) {
       this.router.navigate([''])
@@ -34,5 +36,10 @@ export class WorkPageComponent {
 
   back() {
     this.location.back()
+  }
+
+  onLogout(){
+    this.local.clear();
+    this.router.navigate(['/login'])
   }
 }

@@ -15,11 +15,7 @@
             <input matInput [(ngModel)]=person.work_place>
         </mat-form-field>
 
-        <mat-radio-group [(ngModel)]="residence_type">
-            <mat-radio-button class="example-radio-button" *ngFor="let type of residence_types" [value]="type">
-                {{type}}
-            </mat-radio-button>
-        </mat-radio-group>
+       
 
         <mat-checkbox [(ngModel)]="is_host">房主</mat-checkbox>
     </div>

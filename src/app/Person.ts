@@ -1,5 +1,6 @@
 // import { RelativeFlag } from "./appType";
-declare var IDValidator;
+import * as IDValidator from 'id-validator'
+// declare var IDValidator;
 export class People {
     id?: number;
     name?: string;
@@ -15,6 +16,9 @@ export class People {
     sex?: string;
     telephone?: string;
     work_place?:string;
+
+    pb_id?:number;
+    is_host?:number;
 
     static male = '男'
     static female = '女'

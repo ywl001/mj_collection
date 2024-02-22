@@ -20,11 +20,7 @@ import { TableName } from '../../app-type';
 })
 export class EditPersonComponent {
 
-  residence_types=[
-    '自住','租住','经商','其他',
-  ]
 
-  residence_type:string = '自住';
 
   person:People
 
