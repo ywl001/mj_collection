@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { TableName } from '../../../app-type';
 import { DataService, MessageType } from '../../../services/data.service';
+import { GVar } from '../../../global-variables';
 
 @Component({
   selector: 'app-home-person',
@@ -55,6 +56,7 @@ export class HomePersonComponent {
   }
 
   onGetHomePeoples(){
+    GVar.homePeopleHost = this.person
     this.sql.getHomePeoples(this.person.id).subscribe(res=>{
       console.log(res)
       this.dialog.open(SelectHomePersonsComponent,{data:res})

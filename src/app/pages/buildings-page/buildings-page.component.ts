@@ -64,6 +64,9 @@ export class BuildingsPageComponent {
 
   onSelectBuilding(building: any) {
     GVar.current_building = building;
+    GVar.panelIndex = -1;
+    GVar.savedScrollPosition = 0;
+    
     this.router.navigate(['building'],{queryParams:building})
   }
   onBack() {

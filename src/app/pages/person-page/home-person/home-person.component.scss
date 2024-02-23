@@ -30,10 +30,31 @@
 .actions {
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    // flex-shrink: 0;
     /* 不要缩小按钮区域 */
 }
 
 .actions button {
     margin-left: 5px;
 }
+
+.square-button {
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #3498db;
+    border: 2px solid #2980b9;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  
+  .square-button:hover {
+    background-color: #2980b9;
+    border-color: #3498db;
+  }
+  

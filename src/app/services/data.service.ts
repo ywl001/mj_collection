@@ -3,6 +3,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { People } from '../Person';
 
 
 export enum MessageType {
@@ -40,11 +41,11 @@ export class DataService {
     this._message.next(m);
   }
 
-  // private _openDialog = new Subject();
-  // openDialog$ = this._openDialog.asObservable();
-  // openDialog(component:ComponentType<any>,data:any) {
-  //   this._openDialog.next({component:component,data:data});
-  // }
+  private _personExtension = new Subject<People>();
+  personExtension$ = this._personExtension.asObservable();
+  personExtension(data:People) {
+    this._personExtension.next(data);
+  }
 
   // private routeData: any={};
 

@@ -6,7 +6,7 @@
 
 <h1>{{hosingName+buildingName+room_number}}</h1>
 
-<mat-radio-group [(ngModel)]="residence_type" style="margin-bottom: 30px;">
+<mat-radio-group [(ngModel)]="residence_type" style="margin-bottom: 30px;" (change)="onChange()">
     <mat-radio-button class="example-radio-button" *ngFor="let type of residence_types" [value]="type">
         {{type}}
     </mat-radio-button>

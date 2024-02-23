@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { HosingsPageComponent } from './pages/hosings-page/hosings-page.component';
@@ -29,25 +29,30 @@ import { LongPressDirective } from './longpress';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'mj_collection';
+  title = '孟津区公安局信息采集';
 
-  userName=''
+  userName = ''
 
   constructor(private dataService: DataService,
-    private router:Router,
-    private sql: SqlService) { 
-    }
+    private router: Router,
+    private sql: SqlService) {
+  }
 
   ngOnInit() {
-    this.dataService.message$.subscribe(res=>{
-      if(res== MessageType.getUserInfo){
-        this.userName = User.real_name.substring(0,1)
+    this.dataService.message$.subscribe(res => {
+      if (res == MessageType.getUserInfo) {
+        this.userName = User.real_name.substring(0, 1)
       }
     })
   }
 
-  onGetUserWork(){
-      this.router.navigate(['/userwork'])
+  onGetUserWork() {
+    this.router.navigate(['/userwork'])
   }
+
+  // @HostListener('window:scroll', ['$event'])
+  // onScroll(event: Event): void {
+  //   console.log('Scroll event triggered:', event);
+  // }
 
 }

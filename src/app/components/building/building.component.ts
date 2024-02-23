@@ -56,8 +56,6 @@ export class BuildingComponent {
 
   }
 
-
-
   private areAllElementsEqual(array) {
     return array.every((element, index, arr) => element === arr[0]);
   }

@@ -10,7 +10,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent }, // 默认路由
     { path: 'hosing', component: HosingsPageComponent },
     { path: 'buildings', component: BuildingsPageComponent },
-    { path: 'building', component: BuildingPageComponent },
+    { path: 'building', component: BuildingPageComponent},
     { path: 'person', component: PersonPageComponent },
     { path: 'userwork', component: WorkPageComponent },
     { path: '',   redirectTo: '/login', pathMatch: 'full' },

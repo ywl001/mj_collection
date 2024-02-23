@@ -1,0 +1,16 @@
+<div style="margin: 10px;">
+    <h2>{{data.name}}是房主吗？</h2>
+    <mat-radio-group [(ngModel)]="is_host" style="margin-bottom: 30px;">
+        <mat-radio-button class="example-radio-button" value="1">是</mat-radio-button>
+        <mat-radio-button class="example-radio-button" value="0">否</mat-radio-button>
+    </mat-radio-group>
+    <h2>{{data.name}}在户籍地吗？</h2>
+    <mat-radio-group [(ngModel)]="is_huji" style="margin-bottom: 30px;">
+        <mat-radio-button class="example-radio-button" value="1">在</mat-radio-button>
+        <mat-radio-button class="example-radio-button" value="0">不在</mat-radio-button>
+    </mat-radio-group>
+    
+    <div style="display: flex;justify-content: center;gap: 30px;">
+        <button mat-raised-button color="primary" (click)="onSubmit()">确定</button>
+    </div>
+</div>

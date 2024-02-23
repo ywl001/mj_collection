@@ -69,7 +69,7 @@ export class SqlService {
   }
 
   getRoomPeoples(building_id, room_number) {
-    const sql = `	SELECT DISTINCT on(p.id) p.id,p.pid,p.name,p.telephone,p.work_place,pp.thumb_url,bp.id pb_id,bp.is_host 
+    const sql = `	SELECT DISTINCT on(p.id) p.id,p.pid,p.name,p.telephone,p.work_place,pp.thumb_url,bp.id pb_id,bp.is_host ,bp.is_huji
     from collect_building_person bp LEFT JOIN people p on bp.person_id = p.id 
     LEFT JOIN people_photo pp on pp.people_id = p.id
     where bp.building_id = ${building_id} and bp.room_number='${room_number}'`
@@ -79,6 +79,12 @@ export class SqlService {
 
   getBuildingWorkInfo(building_id) {
     const sql = `SELECT * FROM collect_work WHERE building_id = ${building_id}`;
+    return this.execSql(sql, this.ACTION_SELECT);
+  }
+
+  getBuildingRoomInfo(building_id,room_number) {
+    const sql = `SELECT * FROM collect_work WHERE building_id = ${building_id} and room_number='${room_number}'`;
+    console.log(sql)
     return this.execSql(sql, this.ACTION_SELECT);
   }
 

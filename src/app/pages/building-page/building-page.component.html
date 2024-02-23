@@ -1,22 +1,26 @@
-<div class="w100 flex">
-    <button mat-flat-button color="primary" class="flex-1" (click)="onBack()">返回</button>
-    <button mat-flat-button color="primary" class="flex-2" (click)="onEditBuilding()">编辑楼栋</button>
+<div class="container">
+
+    <div class="w100 flex">
+        <button mat-flat-button color="primary" class="flex-1" (click)="onBack()">返回</button>
+        <button mat-flat-button color="primary" class="flex-2" (click)="onEditBuilding()">编辑楼栋</button>
+    </div>
+
+    <h2>{{hosing.hosing_name}}{{building.building_number}}号楼</h2>
+    <div class="accordion-container" #accordionContainer (scroll)="onScroll($event)">
+        <mat-accordion displayMode="flat" #matAccordion>
+            <mat-expansion-panel *ngFor="let unit of building.unit_home;index as i" (opened)="onClickUnit(i)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{i+1}}单元
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div *ngFor="let item of unitRoomNumbers" class="list-item" [style.background]="getBgColor(item)"
+                    (click)="onClickRoom(item);$event.stopPropagation();">
+                    <span>{{item.room_number}}</span>
+                    <span *ngIf="item.result_message"> {{item.result_message}}</span>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 </div>
-
-<h2>{{hosing.hosing_name}}{{building.building_number}}号楼</h2>
-<mat-accordion displayMode="flat">
-    <mat-expansion-panel *ngFor="let unit of building.unit_home;index as i" (click)="onClickUnit(i)">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                {{i+1}}单元
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div *ngFor="let item of unitRoomNumbers" class="list-item"
-            [style.background] = "getBgColor(item)"
-            (click)="onClickRoom(item);$event.stopPropagation();">
-            <span>{{item.room_number}}</span>
-            <span *ngIf="item.result_message"> {{item.result_message}}</span>
-        </div>
-    </mat-expansion-panel>
-</mat-accordion>
