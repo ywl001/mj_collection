@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { People } from '../../Person';
-import { SqlService } from '../../services/sql.service';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TableName } from '../../app-type';
 import copy from 'fast-copy';
 import toastr from 'toastr'
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-edit-person',
@@ -31,7 +31,7 @@ export class EditPersonComponent {
 
   oldData;
 
-  constructor(private sql: SqlService, @Inject(MAT_DIALOG_DATA) data: any,
+  constructor(private sql: DbService, @Inject(MAT_DIALOG_DATA) data: any,
     private dialogRef: MatDialogRef<EditPersonComponent>) {
     this.person = data;
     this.is_host = this.person.is_host == 1

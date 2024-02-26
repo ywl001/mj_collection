@@ -2,12 +2,12 @@ import { NgFor } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatRadioModule } from '@angular/material/radio';
-import { SqlService } from '../../services/sql.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { mergeMap } from 'rxjs';
 import { User } from '../../User';
 import { Work, TableName } from '../../app-type';
+import { DbService } from '../../services/db.service';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class RoomErrorComponent {
 
   private building_id
   private room_number;
-  constructor(private sql:SqlService,
+  constructor(private sql:DbService,
     @Inject(MAT_DIALOG_DATA) data: any,
     private dialogRef:MatDialogRef<RoomErrorComponent>){
       this.building_id = data.building_id;

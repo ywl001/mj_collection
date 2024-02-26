@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { People } from '../../Person';
-import { SqlService } from '../../services/sql.service';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-people-item',
@@ -18,7 +18,7 @@ export class PeopleItemComponent {
 
   @Output() selectPeople:EventEmitter<People> = new EventEmitter();
 
-  constructor(private sql: SqlService) { }
+  constructor() { }
 
   @Input()
   set data(value: People) {

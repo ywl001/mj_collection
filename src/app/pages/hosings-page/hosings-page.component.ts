@@ -3,13 +3,13 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, interval, of } from 'rxjs';
 import { DataService, MessageType } from '../../services/data.service';
-import { SqlService } from '../../services/sql.service';
 import { MatButtonModule } from '@angular/material/button';
 import { HosingComponent } from '../../components/hosing/hosing.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
 import { LongPressDirective } from '../../longpress';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-hosings',
@@ -27,7 +27,8 @@ export class HosingsPageComponent {
 
   constructor(private dataService: DataService,
     private dialog: MatDialog,
-    private sql: SqlService,
+    // private sql: SqlService,
+    private dbService:DbService,
     private router: Router) {
       console.log(User.real_name)
       if(!User.id){
@@ -51,7 +52,7 @@ export class HosingsPageComponent {
   }
 
   private getAllHosing() {
-    this.sql.getAllHosing().subscribe(res => {
+    this.dbService.getAllHosing().subscribe(res => {
       this.hosings = res
     })
   }

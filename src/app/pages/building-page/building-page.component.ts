@@ -1,19 +1,18 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Building, Hosing } from '../../app-type';
-import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
-import { NgFor, NgIf, ViewportScroller } from '@angular/common';
+import {  MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from '../../services/data.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { SqlService } from '../../services/sql.service';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
 import { MatDialog } from '@angular/material/dialog';
 import { BuildingComponent } from '../../components/building/building.component';
 import { Subscription } from 'rxjs';
-import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { ScrollPositionService } from '../../services/scroll-position.service';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-building',
@@ -30,16 +29,12 @@ export class BuildingPageComponent {
 
   constructor(
     private router: Router,
-    private sql: SqlService,
+    // private sql: SqlService,
+    private dbService:DbService,
     private location: Location,
     private dialog: MatDialog,
     private dataService: DataService,
-    private scrollDispatcher: ScrollDispatcher,
-    private cdr:ChangeDetectorRef,
-    private viewportScroller: ViewportScroller,
     private scrollService:ScrollPositionService,
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
     route: ActivatedRoute) {
     if (!User.id) {
       this.router.navigate([''])
@@ -77,13 +72,14 @@ export class BuildingPageComponent {
   private sub1: Subscription
   ngOnInit() {
     console.log('building page init')
-    this.getBuildingInfo().subscribe(res=>{
+    this.getBuildingWorkInfo().subscribe(res=>{
+      console.log(res)
       this.buildingInfos = res;
     })
     this.sub1 = this.dataService.message$.subscribe(res => {
       if (res == MessageType.editBuilding) {
         console.log('编辑楼栋后刷新')
-        this.getBuildingInfo();
+        this.getBuildingWorkInfo();
       }
     })
   }
@@ -91,7 +87,7 @@ export class BuildingPageComponent {
   ngAfterViewInit(): void {
     console.log(this.accordionContainer)
     if (GVar.panelIndex >= 0) {
-      this.getBuildingInfo().subscribe(res=>{
+      this.getBuildingWorkInfo().subscribe(res=>{
         this.buildingInfos = res;
         const panelToOpen = this.panels.toArray()[GVar.panelIndex];
         panelToOpen.opened.subscribe(res=>{
@@ -99,14 +95,11 @@ export class BuildingPageComponent {
           this.scrollPosition = this.scrollService.getScrollPosition(scrollKey);
         })
         panelToOpen.open();
-        // this.cdr.detectChanges()
       })
     }
   }
 
   ngAfterContentChecked(): void {
-    // console.log('ngAfterContentChecked')
-    // After the content is checked, scroll to the saved position
     if(this.accordionContainer && this.hasScrollbar(this.accordionContainer.nativeElement)){
       if (this.scrollPosition !== undefined) {
         this.accordionContainer.nativeElement.scrollTop = this.scrollPosition;
@@ -171,8 +164,8 @@ export class BuildingPageComponent {
     return arr;
   }
 
-  private getBuildingInfo() {
-    return this.sql.getBuildingWorkInfo(this.building.id)
+  private getBuildingWorkInfo() {
+    return this.dbService.getBuildingWorkInfo(this.building.id)
   }
 
   onBack() {

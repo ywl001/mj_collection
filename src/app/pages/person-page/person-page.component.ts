@@ -14,7 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PeopleSelectComponent } from '../../people-select/people-select.component';
 import { People } from '../../Person';
 import { DataService, MessageType } from '../../services/data.service';
-import { SqlService } from '../../services/sql.service';
 import { Person_building, TableName, Work } from '../../app-type';
 import { User } from '../../User';
 import { RoomErrorComponent } from '../../components/room-error/room-error.component';
@@ -23,6 +22,7 @@ import toastr from 'toastr'
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { PersonExtensionDialogComponent } from '../../components/person-extension-dialog/person-extension-dialog.component';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-person-page',
@@ -35,8 +35,8 @@ export class PersonPageComponent {
 
   persons: People[] = [];
 
-  building_id;
-  room_number;
+  building_id:number;
+  room_number:string;
   hosingName: string = '';
   buildingName: string;
 
@@ -50,7 +50,8 @@ export class PersonPageComponent {
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private sql: SqlService,
+    // private sql: SqlService,
+    private dbService: DbService,
     private location: Location) {
     if (!User.id) {
       this.router.navigate([''])
@@ -75,12 +76,14 @@ export class PersonPageComponent {
       this.dataService.personExtension$.pipe(take(1)).
         subscribe(p => {
           //插入人员到人员房屋表
-          this.insertPeopleToBuilding(p).subscribe(pb_id => {
-            p.pb_id = pb_id;
-            this.persons.unshift(p);
+          this.insertPeopleToBuilding(p).subscribe(res => {
+            console.log(res)
+            p.pb_id = res.insertedId;
+            this.persons.push(p);
             //更新房屋状态
-            this.insertOrUpdateWork().subscribe(res=>{
-              toastr.success('添加人员成功')
+            this.insertOrUpdateWork().subscribe(res => {
+              toastr.success('添加人员成功');
+              this.getRoomPeoples()
             })
           })
         })
@@ -98,31 +101,27 @@ export class PersonPageComponent {
         if (!this.checkPersonIsExist(p)) {
           p.is_host = 0;
           p.is_huji = GVar.homePeopleHost.is_huji;
-          console.log('one home',p)
-          this.insertPeopleToBuilding(p).subscribe(res=>{
+          console.log('one home', p)
+          this.insertPeopleToBuilding(p).subscribe(res => {
             p.pb_id = res;
             this.persons.push(p)
-            this.insertOrUpdateWork().subscribe(res=>{
-              toastr.info('插入人员'+p.name+'成功')
+            this.insertOrUpdateWork().subscribe(res => {
+              toastr.info('插入人员' + p.name + '成功')
+              // this.getRoomPeoples()
             })
           })
-        }else{
+        } else {
           toastr.info(`人员${p.name}已经存在`)
         }
       })
     })
 
-    this.sub2 = this.dataService.message$.subscribe(res => {
-      if (res == MessageType.delPersonFromBuilding) {
-        this.sql.getRoomPeoples(this.building_id, this.room_number)
-          .subscribe(res => {
-            this.persons = res;
-            //删除人员后更新房屋状态
-            this.insertOrUpdateWork().subscribe(res => {
-              toastr.info('更新房屋状态信息')
-            });
-          })
-      }
+    this.sub2 = this.dataService.deleteBuildingPerson$.subscribe(delPersonId => {
+      const pindex = this.persons.findIndex(p => p.id === delPersonId)
+      this.persons.splice(pindex, 1);
+      this.insertOrUpdateWork().subscribe(res => {
+        toastr.info('更新房屋状态信息')
+      });
     })
   }
 
@@ -134,15 +133,17 @@ export class PersonPageComponent {
 
   //获取房间人员
   private getRoomPeoples() {
-    this.sql.getRoomPeoples(this.building_id, this.room_number).subscribe(res => {
+    this.dbService.getRoomPeoples(this.building_id, this.room_number).subscribe(res => {
       console.log('room peoples', res)
       this.persons = res;
     })
   }
 
+  //为单选按钮赋值
   private getRoomWorkInfo() {
-    this.sql.getBuildingRoomInfo(this.building_id, this.room_number).subscribe(res => {
-      console.log('get room work info', res)
+    console.log(this.building_id, this.room_number)
+    this.dbService.getRoomWorkInfo(this.building_id, this.room_number).subscribe(res => {
+      // console.log('get room work info', res)
       if (res.length > 0) {
         const workInfo = res[0]
         this.residence_type = workInfo.use_for;
@@ -160,11 +161,12 @@ export class PersonPageComponent {
 
   onChange() {
     console.log('on change')
-    this.insertOrUpdateWork().subscribe(res=>{
+    this.insertOrUpdateWork().subscribe(res => {
       toastr.info('更新房屋信息成功')
     })
   }
 
+  //插入人员到楼栋房间
   private insertPeopleToBuilding(p: People) {
     const tableData: Person_building = {
       building_id: this.building_id,
@@ -174,12 +176,12 @@ export class PersonPageComponent {
       user_id: User.id,
       is_huji: p.is_huji
     }
-    return this.sql.insert(TableName.person_building, tableData)
+    return this.dbService.insert(TableName.person_building, tableData)
   }
 
   private insertOrUpdateWork() {
     console.log('更新房屋状态信息')
-    return this.sql.getRoomWorkIsExists(this.building_id, this.room_number).pipe(
+    return this.dbService.getRoomWorkIsExists(this.building_id, this.room_number).pipe(
       mergeMap(id => {
         if (id > 0) {
           return this.updateWork(id)
@@ -199,11 +201,9 @@ export class PersonPageComponent {
       user_id: User.id,
       use_for: this.residence_type
     }
-    console.log('插入' + tableData)
-    return this.sql.insert(TableName.collect_work, tableData)
+    console.log('插入work table' + tableData)
+    return this.dbService.insert(TableName.collect_work, tableData)
   }
-
-
 
   private updateWork(id) {
     let tableData: Work = {
@@ -215,8 +215,8 @@ export class PersonPageComponent {
     if (tableData.result_message == '0人') {
       tableData.result = 0;
     }
-    console.log('更新', tableData)
-    return this.sql.update(TableName.collect_work, tableData, id)
+    console.log('更新 work table', tableData)
+    return this.dbService.update(TableName.collect_work, tableData, id)
   }
 
   onErrorWork() {

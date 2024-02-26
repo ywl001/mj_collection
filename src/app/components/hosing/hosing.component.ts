@@ -6,10 +6,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SqlService } from '../../services/sql.service';
 import { DataService, MessageType } from '../../services/data.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TableName } from '../../app-type';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-hosing',
@@ -28,7 +28,7 @@ import { TableName } from '../../app-type';
 export class HosingComponent {
   data: any = {};
 
-  constructor(private sql: SqlService,
+  constructor(private dbService: DbService,
     @Inject(MAT_DIALOG_DATA) data: any,
     private dialogRef: MatDialogRef<HosingComponent>,
     // private dialog:MatDialog,
@@ -56,12 +56,12 @@ export class HosingComponent {
 
   onSubmit() {
     if (!this.data.id) {
-      this.sql.insert('collect_hosing', this.data).subscribe(res => {
+      this.dbService.insert('collect_hosing', this.data).subscribe(res => {
         this.dataService.sendMessage(MessageType.addHosing);
         this.dialogRef.close()
       })
     } else {
-      this.sql.update(TableName.collect_hosing, this.data, this.data.id).subscribe(res => {
+      this.dbService.update(TableName.collect_hosing, this.data, this.data.id).subscribe(res => {
         // this.dataService.sendMessage(MessageType.closeDialog)
         this.dialogRef.close()
       })

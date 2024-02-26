@@ -7,10 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { config } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { SqlService } from '../../services/sql.service';
 import { DataService, MessageType } from '../../services/data.service';
 import { TableName } from '../../app-type';
 import toastr from 'toastr'
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-building',
@@ -33,7 +33,7 @@ export class BuildingComponent {
 
   hosingId
 
-  constructor(private sql: SqlService,
+  constructor(private dbService: DbService,
     private dataService: DataService,
     private dialog: MatDialogRef<BuildingComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,) {
@@ -66,14 +66,14 @@ export class BuildingComponent {
         // this.data.hosing_id = this.h
         const tableData = Object.assign({}, this.data, { unit_home: this.getUnitData(), hosing_id: this.hosingId })
         console.log(tableData)
-        this.sql.insert(TableName.collect_building, tableData).subscribe(res => {
+        this.dbService.insert(TableName.collect_building, tableData).subscribe(res => {
           console.log(res);
           this.dataService.sendMessage(MessageType.addBuilding);
           this.dialog.close();
         })
       } else {
         const tableData = Object.assign({}, this.data, { unit_home: this.getUnitData() })
-        this.sql.update(TableName.collect_building, tableData, this.data.id).subscribe(res => {
+        this.dbService.update(TableName.collect_building, tableData, this.data.id).subscribe(res => {
           console.log(res);
           this.dataService.sendMessage(MessageType.editBuilding);
           this.dialog.close();

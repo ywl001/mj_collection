@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SqlService } from '../../services/sql.service';
 import toastr from 'toastr'
 import { User } from '../../User';
 import { Router } from '@angular/router';
 import { LocalStorgeService } from '../../services/local-storge.service';
 import { DataService, MessageType } from '../../services/data.service';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private sql:SqlService,
+  constructor(private sql:DbService,
     private local:LocalStorgeService,
     private dataService:DataService,
     private router:Router){

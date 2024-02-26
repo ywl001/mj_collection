@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SqlService } from '../../services/sql.service';
 import { User } from '../../User';
 import { CommonModule, NgFor, Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { LocalStorgeService } from '../../services/local-storge.service';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-work-page',
@@ -18,7 +18,7 @@ export class WorkPageComponent {
 
   // formattedDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
 
-  constructor(private sql: SqlService,
+  constructor(private sql: DbService,
     private location: Location,
     private local:LocalStorgeService,
     private router: Router) {

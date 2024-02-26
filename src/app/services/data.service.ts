@@ -47,6 +47,12 @@ export class DataService {
     this._personExtension.next(data);
   }
 
+  private _deleteBuildingPerson = new Subject<number>();
+  deleteBuildingPerson$ = this._deleteBuildingPerson.asObservable();
+  deleteBuildingPerson(person_id:number) {
+    this._deleteBuildingPerson.next(person_id);
+  }
+
   // private routeData: any={};
 
   // setRouteData(key:string,data: any): void {

@@ -5,13 +5,13 @@ import { HosingsPageComponent } from './pages/hosings-page/hosings-page.componen
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from './services/data.service';
 import { of } from 'rxjs';
-import { SqlService } from './services/sql.service';
 import { BuildingPageComponent } from './pages/building-page/building-page.component';
 import { BuildingsPageComponent } from './pages/buildings-page/buildings-page.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Dialog } from '@angular/cdk/dialog';
 import { User } from './User';
 import { LongPressDirective } from './longpress';
+import { DbService } from './services/db.service';
 
 
 @Component({
@@ -34,8 +34,7 @@ export class AppComponent {
   userName = ''
 
   constructor(private dataService: DataService,
-    private router: Router,
-    private sql: SqlService) {
+    private router: Router) {
   }
 
   ngOnInit() {

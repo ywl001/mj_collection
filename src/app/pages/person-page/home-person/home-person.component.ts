@@ -4,12 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { People } from '../../../Person';
 import { EditPersonComponent } from '../../../components/edit-person/edit-person.component';
 import { SelectHomePersonsComponent } from '../../../components/select-home-persons/select-home-persons.component';
-import { SqlService } from '../../../services/sql.service';
 import Swal from 'sweetalert2';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { TableName } from '../../../app-type';
 import { DataService, MessageType } from '../../../services/data.service';
 import { GVar } from '../../../global-variables';
+import { DbService } from '../../../services/db.service';
 
 @Component({
   selector: 'app-home-person',
@@ -48,7 +48,8 @@ export class HomePersonComponent {
 
   constructor(private dialog:MatDialog,
     private cdr:ChangeDetectorRef,
-    private sql:SqlService,
+    // private sql:SqlService,
+    private dbService:DbService,
     private dataService:DataService){}
 
   onEditPerson(){
@@ -57,7 +58,7 @@ export class HomePersonComponent {
 
   onGetHomePeoples(){
     GVar.homePeopleHost = this.person
-    this.sql.getHomePeoples(this.person.id).subscribe(res=>{
+    this.dbService.getHomePeoples(this.person.id).subscribe(res=>{
       console.log(res)
       this.dialog.open(SelectHomePersonsComponent,{data:res})
     })
@@ -73,9 +74,9 @@ export class HomePersonComponent {
       if (result.isConfirmed) {
         //删除人员
         console.log(this.person.pb_id)
-        this.sql.delete(TableName.person_building,this.person.pb_id).subscribe(res=>{
+        this.dbService.delete(TableName.person_building,this.person.pb_id).subscribe(res=>{
           console.log(res)
-          this.dataService.sendMessage(MessageType.delPersonFromBuilding)
+          this.dataService.deleteBuildingPerson(this.person.id)
         })
       } 
     });
@@ -83,7 +84,7 @@ export class HomePersonComponent {
 
   onSetHomeHost(){
     const tableData={is_host:1}
-    this.sql.update(TableName.person_building,tableData,this.person.pb_id).subscribe(res=>{
+    this.dbService.update(TableName.person_building,tableData,this.person.pb_id).subscribe(res=>{
       this.person.is_host = 1
       console.log('房主ok')
     })

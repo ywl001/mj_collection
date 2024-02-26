@@ -4,12 +4,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService, MessageType } from '../../services/data.service';
 import { Location } from '@angular/common';
-import { SqlService } from '../../services/sql.service';
 import { BuildingComponent } from '../../components/building/building.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-buildings',
@@ -26,7 +26,7 @@ export class BuildingsPageComponent {
   constructor(private dataService: DataService,
     private router: Router,
     private route:ActivatedRoute,
-    private sql: SqlService,
+    private dbService:DbService,
     private dialog: MatDialog,
     private location: Location) {
       if(!User.id){
@@ -56,8 +56,8 @@ export class BuildingsPageComponent {
   }
 
   private getBuildings(hosingId) {
-    this.sql.getHosingBuildings(hosingId).subscribe(res => {
-      console.log(res)
+    this.dbService.getHosingBuildings(hosingId)
+    .subscribe(res => {
       this.buildings = res;
     })
   }

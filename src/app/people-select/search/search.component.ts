@@ -5,11 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 // import * as IDValidator from 'id-validator';
 import toastr from 'toastr';
 // import * as pinyin from 'pinyin';
-import { SqlService } from '../../services/sql.service';
 import { People } from '../../Person';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { DbService } from '../../services/db.service';
 
 const iconClear = `<svg t="1685117430288" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5533" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M958.358489 152.199401l-89.399099-89.430822L511.17368 420.522566 153.388994 62.768579 63.988872 152.199401l357.785709 357.753987L63.988872 867.708398l89.400123 89.430822L511.17368 599.38421l357.785709 357.753987 89.399099-89.430822L600.573803 509.953388 958.358489 152.199401z" fill="#666666" p-id="5534"></path></svg>`
 const iconClear_over = `<svg t="1685117430288" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5533" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M958.358489 152.199401l-89.399099-89.430822L511.17368 420.522566 153.388994 62.768579 63.988872 152.199401l357.785709 357.753987L63.988872 867.708398l89.400123 89.430822L511.17368 599.38421l357.785709 357.753987 89.399099-89.430822L600.573803 509.953388 958.358489 152.199401z" fill="#d4237a" p-id="5534"></path></svg>`
@@ -73,7 +73,7 @@ export class SearchComponent {
   constructor(sanitizer: DomSanitizer,
     iconRegistry: MatIconRegistry,
     private cdr: ChangeDetectorRef,
-    private sql: SqlService) {
+    private sql: DbService) {
     this.regiteIcon(sanitizer, iconRegistry);
   }
 

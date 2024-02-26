@@ -19,7 +19,7 @@ export interface Person_building {
 export interface Work {
     id?: number
     building_id?: number
-    room_number?: number
+    room_number?: string
     result?: number
     result_message?: string
     user_id?: number
