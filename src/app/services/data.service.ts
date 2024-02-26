@@ -20,7 +20,8 @@ export enum MessageType {
   clearSketchGraphic = 'clearSketchGraphic',
   uploadPhotoComplete='uploadPhotoComplete',
   addHosing = 'addHosing',
-  getUserInfo = 'getUserInfo'
+  getUserInfo = 'getUserInfo',
+  login_success = 'login_success'
   // closeDialog = 'closeDialog'
 }
 

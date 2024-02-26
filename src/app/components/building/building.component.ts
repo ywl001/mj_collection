@@ -86,8 +86,7 @@ export class BuildingComponent {
     if (this.isNormal) {
       return JSON.stringify(Array(this.countUint).fill(this.countHome))
     } else {
-      const arr = this.unitArray.trim().replace(/ +/g, ' ').split(' ');
-      return JSON.stringify(arr)
+      return JSON.stringify(this.unitToArray())
     }
   }
 
@@ -95,15 +94,15 @@ export class BuildingComponent {
     if (!this.data.building_number || this.data.building_number.length == 0) {
       return false;
     }
-    if (!this.isPositiveInteger(this.countUint)) {
+    if (!this.isPositiveInteger(this.data.floor)) {
       //单元数或单元户数必须正整数
-      toastr.warning('单元数或单元户数必须正整数')
+      toastr.warning('楼层数必须正整数')
       return false;
     }
     if (!this.isNormal) {
-      const arr = this.unitArray.trim().replace(/ +/g, ' ').split(' ');
-      if (this.isNumericArray(arr)) {
-        // 单元必须纯数字
+      const arr = this.unitToArray()
+      console.log(arr)
+      if (!this.isNumericArray(arr)) {
         toastr.warning('单元必须纯数字')
         return false;
       }
@@ -117,10 +116,14 @@ export class BuildingComponent {
     return true;
   }
 
+  unitToArray(){
+    return this.unitArray.trim().replace(/ +/g, ' ').split(' ').map(v=>parseInt(v));
+  }
+
   //是否纯数字的数组
-  private isNumericArray(arr) {
-    return arr.every(function (element) {
-      // 使用isNaN检查是否为数字
+  private isNumericArray(arr:any[]) {
+    return arr.every(element=> {
+      console.log(element,!isNaN(element))
       return !isNaN(element);
     });
   }

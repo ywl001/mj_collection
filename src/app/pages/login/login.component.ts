@@ -55,6 +55,7 @@ export class LoginComponent {
 
 
         this.router.navigate(['/hosing'])
+        this.dataService.sendMessage(MessageType.login_success)
 
       }else{
         toastr.info('用户名或密码错误')

@@ -41,6 +41,8 @@ export class AppComponent {
     this.dataService.message$.subscribe(res => {
       if (res == MessageType.getUserInfo) {
         this.userName = User.real_name.substring(0, 1)
+      }if(res == MessageType.login_success){
+        this.userName = User.real_name.substring(0, 1)
       }
     })
   }
