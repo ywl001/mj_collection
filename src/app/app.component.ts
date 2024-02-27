@@ -12,6 +12,8 @@ import { Dialog } from '@angular/cdk/dialog';
 import { User } from './User';
 import { LongPressDirective } from './longpress';
 import { DbService } from './services/db.service';
+import moment from 'moment';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -34,16 +36,25 @@ export class AppComponent {
   userName = ''
 
   constructor(private dataService: DataService,
+    private dbService:DbService,
     private router: Router) {
   }
 
   ngOnInit() {
+    console.log(moment().format('yyyy-DD-DD'))
     this.dataService.message$.subscribe(res => {
       if (res == MessageType.getUserInfo) {
         this.userName = User.real_name.substring(0, 1)
       }if(res == MessageType.login_success){
         this.userName = User.real_name.substring(0, 1)
       }
+    })
+
+    this.dataService.selectDate$.subscribe(res=>{
+      this.dbService.getUserInserPersons(User.id,res).subscribe(res=>{
+        console.log(res)
+        this.saveSheet(res)
+      })
     })
   }
 
@@ -55,5 +66,15 @@ export class AppComponent {
   // onScroll(event: Event): void {
   //   console.log('Scroll event triggered:', event);
   // }
+
+  private saveSheet(arr: any[]) {
+    const ws = XLSX.utils.json_to_sheet(arr);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'people');
+
+    /* save to file */
+    let fileName = User.real_name+'导出数据'
+    XLSX.writeFile(wb, fileName + ".xlsx");
+  }
 
 }

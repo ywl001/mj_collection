@@ -1,18 +1,24 @@
-<mat-radio-group [(ngModel)]="dataType" style="margin-bottom: 30px;" (change)="onChange()">
-    <mat-radio-button class="example-radio-button" *ngFor="let type of dataTypes" [value]="type">
-        {{type}}
-    </mat-radio-button>
+<mat-radio-group class="example-radio-group" [(ngModel)]="dataType" style="margin-bottom: 30px;" (change)="onChange()">
+  <mat-radio-button class="example-radio-button" *ngFor="let type of dataTypes" [value]="type.value">
+    {{type.label}}
+  </mat-radio-button>
 </mat-radio-group>
-<mat-form-field>
-    <mat-label>Enter a date range</mat-label>
-    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-      <input matStartDate formControlName="start" placeholder="Start date">
-      <input matEndDate formControlName="end" placeholder="End date">
-    </mat-date-range-input>
-    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  
-    <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-    <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-  </mat-form-field>>
+
+<mat-form-field *ngIf="dataType == -1">
+  <mat-label>输入一个日期范围</mat-label>
+  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+    <input matStartDate formControlName="start" placeholder="开始日期">
+    <input matEndDate formControlName="end" placeholder="结束日期（不包含）">
+  </mat-date-range-input>
+  <mat-hint>年-月-日 – 年-月-日</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+
+  <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+  <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+</mat-form-field>>
+
+<div style="display: flex;justify-content: center;gap: 30px; margin-bottom: 10px;">
+  <button mat-raised-button color="primary" (click)="onSubmit()">确定</button>
+  <button mat-raised-button color="warn" mat-dialog-close>取消</button>
+</div>

@@ -11,5 +11,5 @@ export class GVar {
     static savedScrollPosition;
 
     static homePeopleHost:People;
-    // static buildingInfo:any[]
+    
 }

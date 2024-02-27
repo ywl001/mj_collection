@@ -8,7 +8,7 @@ import { config } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DataService, MessageType } from '../../services/data.service';
-import { TableName } from '../../app-type';
+import { Building, TableName } from '../../app-type';
 import toastr from 'toastr'
 import { DbService } from '../../services/db.service';
 
@@ -23,7 +23,7 @@ export class BuildingComponent {
 
   isNormal: boolean = true;
 
-  data: any = {};
+  data: Building = {};
 
   countUint
 
@@ -36,16 +36,19 @@ export class BuildingComponent {
   constructor(private dbService: DbService,
     private dataService: DataService,
     private dialog: MatDialogRef<BuildingComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any,) {
+    @Inject(MAT_DIALOG_DATA) data: Building,) {
     this.hosingId = data?.hosingId
     this.data.floor = data?.floor;
     this.data.building_number = data?.building_number
-    if (data?.unit_home) {
+    if (data.unit_home) {
       if (this.areAllElementsEqual(data.unit_home)) {
+        this.isNormal = true;
         this.countUint = data.unit_home.length;
         this.countHome = data.unit_home[0]
       } else {
-        this.unitArray = data.unit_home
+        this.isNormal = false;
+        this.unitArray = data.unit_home.join(' ')
+        console.log(this.unitArray)
       }
     }
     if (data.id)
@@ -116,7 +119,8 @@ export class BuildingComponent {
     return true;
   }
 
-  unitToArray(){
+  private unitToArray(){
+    //转成数组前去除两端空格，如果中间有两个空格变成一个空格，然后按空格分割成数组
     return this.unitArray.trim().replace(/ +/g, ' ').split(' ').map(v=>parseInt(v));
   }
 

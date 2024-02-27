@@ -1,17 +1,6 @@
 <div class="root">
     <button mat-flat-button color="primary" class="w100" (click)="onAddHosing()">添加小区</button>
     <div class="line"></div>
-    <!-- <div *ngFor="let item of hosings" class="hosing" (click)="onSelectHosing(item)">
-        <div></div>
-        {{item.hosing_name}}
-        
-    </div> -->
-
-    <!-- <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)">
-        <p>{{item.hosing_name}}</p>
-        <button>按钮</button>
-    </div> -->
-
     <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)" longPress (mouseLongPress)="onLongPress(item)">
         {{item.hosing_name}}
     </div>
