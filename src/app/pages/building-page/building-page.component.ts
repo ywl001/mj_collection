@@ -39,7 +39,7 @@ export class BuildingPageComponent {
     if (!User.id) {
       this.router.navigate([''])
     }
-    this.building = route.snapshot.queryParams;
+    this.building = GVar.current_building;
     this.hosing = GVar.current_hosing;
   }
 
@@ -86,6 +86,7 @@ export class BuildingPageComponent {
 
   ngAfterViewInit(): void {
     console.log(this.accordionContainer)
+    console.log(GVar.panelIndex,this.panels)
     if (GVar.panelIndex >= 0) {
       this.getBuildingWorkInfo().subscribe(res=>{
         this.buildingInfos = res;

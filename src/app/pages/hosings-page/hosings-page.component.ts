@@ -58,7 +58,7 @@ export class HosingsPageComponent {
   }
 
   onSelectHosing(hosing: any) {
-    console.log(hosing)
+    // console.log(hosing)
     GVar.current_hosing = hosing;
     this.router.navigate(['/buildings'], { queryParams: { hosing_id: hosing.id } })
   }

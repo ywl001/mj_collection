@@ -36,9 +36,9 @@ export class BuildingsPageComponent {
     // this.buildings = dataService.getRouteData('buildings')
     // this.hosingId = this.route.snapshot.params['hosing_id']
     this.hosing = GVar.current_hosing
-    console.log(this.hosing)
+    // console.log(this.hosing)
     this.hosingId = this.hosing.id
-    console.log(this.hosingId)
+    // console.log(this.hosingId)
   }
 
   private sub1:Subscription
@@ -66,8 +66,10 @@ export class BuildingsPageComponent {
     GVar.current_building = building;
     GVar.panelIndex = -1;
     GVar.savedScrollPosition = 0;
-    
-    this.router.navigate(['building'],{queryParams:building})
+
+    console.log(building)
+
+    this.router.navigate(['/building'],{queryParams:building})
   }
   onBack() {
     this.location.back()
