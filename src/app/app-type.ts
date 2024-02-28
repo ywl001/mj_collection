@@ -1,6 +1,7 @@
 export interface Building {
     id?: number,
     building_number?: string
+    hosingId?:number
     floor?: number
     unit_home?: number[]
 }

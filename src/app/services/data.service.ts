@@ -54,6 +54,12 @@ export class DataService {
     this._deleteBuildingPerson.next(person_id);
   }
 
+  private _selectDate = new Subject<any>();
+  selectDate$ = this._selectDate.asObservable();
+  selectDate(selectDate:any) {
+    this._selectDate.next(selectDate);
+  }
+
   // private routeData: any={};
 
   // setRouteData(key:string,data: any): void {

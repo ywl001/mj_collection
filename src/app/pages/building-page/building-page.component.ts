@@ -11,8 +11,8 @@ import { User } from '../../User';
 import { MatDialog } from '@angular/material/dialog';
 import { BuildingComponent } from '../../components/building/building.component';
 import { Subscription } from 'rxjs';
-import { ScrollPositionService } from '../../services/scroll-position.service';
 import { DbService } from '../../services/db.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-building',
@@ -29,12 +29,10 @@ export class BuildingPageComponent {
 
   constructor(
     private router: Router,
-    // private sql: SqlService,
     private dbService:DbService,
     private location: Location,
     private dialog: MatDialog,
     private dataService: DataService,
-    private scrollService:ScrollPositionService,
     route: ActivatedRoute) {
     if (!User.id) {
       this.router.navigate([''])
@@ -73,7 +71,6 @@ export class BuildingPageComponent {
   ngOnInit() {
     console.log('building page init')
     this.getBuildingWorkInfo().subscribe(res=>{
-      console.log(res)
       this.buildingInfos = res;
     })
     this.sub1 = this.dataService.message$.subscribe(res => {
@@ -92,8 +89,7 @@ export class BuildingPageComponent {
         this.buildingInfos = res;
         const panelToOpen = this.panels.toArray()[GVar.panelIndex];
         panelToOpen.opened.subscribe(res=>{
-          const scrollKey = 'list';
-          this.scrollPosition = this.scrollService.getScrollPosition(scrollKey);
+          this.scrollPosition = GVar.savedScrollPosition
         })
         panelToOpen.open();
       })
@@ -120,11 +116,8 @@ export class BuildingPageComponent {
   }
 
   onScroll(event: Event): void {
-    const scrollKey = 'list'; // 使用唯一的键来标识列表页
     const scrollPosition = (event.target as Element).scrollTop;
-    this.scrollService.saveScrollPosition(scrollKey, scrollPosition);
     GVar.savedScrollPosition = scrollPosition;
-    // console.log('scroll....',scrollPosition)
   }
 
   private numToArray(num) {
@@ -181,6 +174,23 @@ export class BuildingPageComponent {
   onEditBuilding() {
     const data = Object.assign({}, this.building, { hosingId: this.hosing.id })
     this.dialog.open(BuildingComponent, { data: this.building })
+  }
+
+  onExportBuildingPersons(){
+    this.dbService.getUserBuildingPersons(this.building.id).subscribe(res=>{
+      // console.log(res)
+      this.saveSheet(res)
+    })
+  }
+
+  private saveSheet(arr: any[]) {
+    const ws = XLSX.utils.json_to_sheet(arr);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'people');
+
+    /* save to file */
+    let fileName = this.building.building_number+'号楼人员数据'
+    XLSX.writeFile(wb, fileName + ".xlsx");
   }
 
 }

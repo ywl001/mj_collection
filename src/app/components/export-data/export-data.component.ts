@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, LOCALE_ID } from '@angular/core';
+import { Component, EventEmitter, LOCALE_ID } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -9,6 +9,11 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FOR
 // import 'moment/locale/zh';
 import { registerLocaleData } from '@angular/common';
 import localeZh from '@angular/common/locales/zh';
+import { MatButtonModule } from '@angular/material/button';
+import moment, { Moment } from 'moment';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import toastr from 'toastr'
+import { DataService } from '../../services/data.service';
 
 registerLocaleData(localeZh);
 
@@ -28,7 +33,7 @@ export const MY_DATE_FORMATS = {
   selector: 'app-export-data',
   standalone: true,
   imports: [MatRadioModule, NgFor, NgIf,
-    MatFormFieldModule, MatDatepickerModule,
+    MatFormFieldModule, MatDatepickerModule, MatButtonModule, MatDialogModule,
     FormsModule, ReactiveFormsModule, MatNativeDateModule,],
   providers: [
     // The locale would typically be provided on the root module of your application. We do it at
@@ -48,9 +53,16 @@ export const MY_DATE_FORMATS = {
   templateUrl: './export-data.component.html',
   styleUrl: './export-data.component.scss'
 })
+
 export class ExportDataComponent {
+
   dataTypes = [
-    '所有数据', '当天数据', '近三天数据', '自定义日期'
+    { label: '所有数据', value: 0 },
+    { label: '当天数据', value: 1 },
+    { label: '两天数据', value: 2 },
+    { label: '三天数据', value: 3 },
+    { label: '一周数据', value: 7 },
+    { label: '自定义日期', value: -1 }
   ]
 
   range = new FormGroup({
@@ -58,10 +70,49 @@ export class ExportDataComponent {
     end: new FormControl<Date | null>(null),
   });
 
-  dataType = '所有数据'
+  dataType = 0
+
+
+  selectDate=new EventEmitter()
+
+  constructor(private dataService:DataService,private dialogRef:MatDialogRef<ExportDataComponent>){}
 
   onChange() {
 
+  }
+
+  onSubmit() {
+    const data = this.getQueryDate();
+    console.log(data)
+    if(!data){
+      toastr.warning('请选择日期')
+    }else{
+      this.dataService.selectDate(data);
+      this.dialogRef.close()
+    } 
+  }
+
+  private getQueryDate() {
+    const value = this.dataType - 1;
+    if (value > 0) {
+      return {
+        startDate: moment().subtract(value, 'days').format('yyyy-MM-DD')
+      }
+    } else if (value == 0) {
+      return {
+        startDate: moment().format('yyyy-MM-DD')
+      }
+    } else if (value == -1) {
+      return {};
+    } else if (value == -2) {
+      if (this.range?.value?.start && this.range?.value?.end) {
+        return {
+          startDate: (this.range.value.start as any).format('yyyy-MM-DD'),
+          endDate: (this.range.value.end as any).format('yyyy-MM-DD')
+        }
+      }
+    }
+    return null
   }
 
 }

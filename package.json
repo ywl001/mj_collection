@@ -29,6 +29,7 @@
     "sweetalert2": "^11.10.5",
     "toastr": "^2.1.4",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
