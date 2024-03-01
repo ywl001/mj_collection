@@ -156,7 +156,7 @@ export class PersonPageComponent {
   }
 
   onBack() {
-    this.location.back()
+    this.location.back();
   }
 
   onChange() {

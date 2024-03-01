@@ -29,16 +29,14 @@ export class BuildingsPageComponent {
     private dbService:DbService,
     private dialog: MatDialog,
     private location: Location) {
-      if(!User.id){
+      if(!User.id || !GVar.current_hosing){
         this.router.navigate([''])
       }
     console.log('buildings construstor')
     // this.buildings = dataService.getRouteData('buildings')
     // this.hosingId = this.route.snapshot.params['hosing_id']
     this.hosing = GVar.current_hosing
-    console.log(this.hosing)
     this.hosingId = this.hosing.id
-    console.log(this.hosingId)
   }
 
   private sub1:Subscription
@@ -52,7 +50,8 @@ export class BuildingsPageComponent {
   }
 
   ngOnDestroy(){
-    this.sub1.unsubscribe();
+    if(this.sub1)
+      this.sub1.unsubscribe();
   }
 
   private getBuildings(hosingId) {

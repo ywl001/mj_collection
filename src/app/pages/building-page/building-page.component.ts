@@ -34,18 +34,19 @@ export class BuildingPageComponent {
     private dialog: MatDialog,
     private dataService: DataService,
     route: ActivatedRoute) {
-    if (!User.id) {
+    if (!User.id || !GVar.current_building) {
       this.router.navigate([''])
     }
-    this.building = GVar.current_building;
-    this.hosing = GVar.current_hosing;
+    if(GVar.current_building){
+      this.building = GVar.current_building;
+      this.hosing = GVar.current_hosing;
+    }
   }
 
   @Input()
   building: Building = {}
 
   unitRoomNumbers = [];
-
 
   private buildingInfos = [];
 
