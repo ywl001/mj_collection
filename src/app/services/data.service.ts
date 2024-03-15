@@ -42,12 +42,14 @@ export class DataService {
     this._message.next(m);
   }
 
+  /**人员扩展信息改变，is_host,is_huji */
   private _personExtension = new Subject<People>();
   personExtension$ = this._personExtension.asObservable();
   personExtension(data:People) {
     this._personExtension.next(data);
   }
 
+  /**删除人员 */
   private _deleteBuildingPerson = new Subject<number>();
   deleteBuildingPerson$ = this._deleteBuildingPerson.asObservable();
   deleteBuildingPerson(person_id:number) {

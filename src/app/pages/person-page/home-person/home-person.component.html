@@ -2,7 +2,7 @@
 <div class="person-item" [style.background]="getBgColor()">
     <div class="photo">
       <!-- 照片显示区域 -->
-      <img [src]="imgUrl" alt="Person Photo">
+      <img [src]="imgUrl" alt="Person Photo" (error)="onImgError()" (click)="onShowPhoto()">
     </div>
     <div class="info">
       <!-- 人员信息显示区域 -->

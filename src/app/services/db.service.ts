@@ -90,7 +90,7 @@ export class DbService {
     return this.exec(PhpMethodNames.GET_USER_WORK, userid)
   }
 
-  getUserInserPersons(userid,selectDate) {
+  getUserInsertPersons(userid,selectDate) {
     return this.exec(PhpMethodNames.GET_USER_INSERT_PEOPLE, {userId:userid,selectDate:selectDate})
   }
 

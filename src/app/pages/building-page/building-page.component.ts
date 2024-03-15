@@ -34,18 +34,19 @@ export class BuildingPageComponent {
     private dialog: MatDialog,
     private dataService: DataService,
     route: ActivatedRoute) {
-    if (!User.id) {
+    if (!User.id || !GVar.current_building) {
       this.router.navigate([''])
     }
-    this.building = GVar.current_building;
-    this.hosing = GVar.current_hosing;
+    if(GVar.current_building){
+      this.building = GVar.current_building;
+      this.hosing = GVar.current_xiaoqu;
+    }
   }
 
   @Input()
   building: Building = {}
 
   unitRoomNumbers = [];
-
 
   private buildingInfos = [];
 
@@ -57,6 +58,9 @@ export class BuildingPageComponent {
     if(item.result_message == '0人'){
       return 'white';
     }
+    if(item.user_id > 10000){
+      return 'blue'
+    }
     if (item.result == 1) {
       return 'lightgreen'
     } else if (item.result == 0) {
@@ -65,6 +69,13 @@ export class BuildingPageComponent {
       return 'red'
     }
     return 'white'
+  }
+
+  getFontColor(item){
+    if(item.user_id>10000){
+      return 'white'
+    }
+    return null;
   }
 
   private sub1: Subscription
@@ -76,7 +87,7 @@ export class BuildingPageComponent {
     this.sub1 = this.dataService.message$.subscribe(res => {
       if (res == MessageType.editBuilding) {
         console.log('编辑楼栋后刷新')
-        this.getBuildingWorkInfo();
+        console.log(res)
       }
     })
   }
@@ -149,6 +160,7 @@ export class BuildingPageComponent {
           if (b.room_number == roomNumber) {
             a.result = b.result
             a.result_message = b.result_message
+            a.user_id = b.user_id;
           }
         }
         arr.push(a)

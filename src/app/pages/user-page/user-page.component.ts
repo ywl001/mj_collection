@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { User } from '../../User';
 import { CommonModule, NgFor, Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,13 +6,15 @@ import { LocalStorgeService } from '../../services/local-storge.service';
 import { DbService } from '../../services/db.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExportDataComponent } from '../../components/export-data/export-data.component';
+import { DataService, MessageType } from '../../services/data.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-work-page',
   standalone: true,
   imports: [NgFor, MatButtonModule,ExportDataComponent],
-  templateUrl: './work-page.component.html',
-  styleUrl: './work-page.component.scss'
+  templateUrl: './user-page.component.html',
+  styleUrl: './user-page.component.scss'
 })
 export class WorkPageComponent {
   works = []
@@ -23,15 +24,17 @@ export class WorkPageComponent {
   constructor(private sql: DbService,
     private location: Location,
     private local:LocalStorgeService,
+    private dataService:DataService,
     private dialog:MatDialog,
+    private userService:UserService,
     private router: Router) {
-    if (!User.id) {
+    if (!userService.user) {
       this.router.navigate([''])
     }
   }
 
   ngOnInit(): void {
-    this.sql.getUserWork(User.id).subscribe(res => {
+    this.sql.getUserWork(this.userService.user.id).subscribe(res => {
       // console.log(res)
       this.works = res;
     })
@@ -43,6 +46,8 @@ export class WorkPageComponent {
 
   onLogout(){
     this.local.clear();
+    this.userService.user = null;
+    this.dataService.sendMessage(MessageType.getUserInfo)
     this.router.navigate(['/login'])
   }
 

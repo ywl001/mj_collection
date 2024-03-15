@@ -1,0 +1,24 @@
+<div class="form" >
+    <div>
+      <label for="username">用户名：</label>
+      <input type="text" id="username" [(ngModel)]="data.username">
+    </div>
+  
+    <div>
+      <label for="password">密码：</label>
+      <input type="password" id="password"  [(ngModel)]="data.password">
+    </div>
+
+    <div>
+        <label for="email">真实姓名：</label>
+        <input type="email" id="email"  [(ngModel)]="data.real_name">
+      </div>
+  
+    <div>
+      <label for="confirmPassword">单位：</label>
+      <input type="password" id="confirmPassword"  [(ngModel)]="data.unit">
+    </div>
+  
+    <button type="submit" (click)="onSubmit()">注册</button>
+</div>
+  

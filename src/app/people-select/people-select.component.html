@@ -1,5 +1,6 @@
 <div class="root">
     <div class="message">{{message}}</div>
+    <!-- <button *ngIf="isShowPeoples" mat-raised-button color="primary" (click)="onShowBigPhoto()">显示大照片列表</button> -->
     <app-add-new-people *ngIf="isShowAddPeople" [data]="newPeople" (cancelAddNew)="onCancelAddNew()" (addPeopleSuccess)="onSelectPeople($event)"></app-add-new-people>
     <div class="peoples" *ngIf="isShowPeoples">
         <app-people-item *ngFor="let item of queryPeoples" [data]="item" (selectPeople)="onSelectPeople($event)"></app-people-item>

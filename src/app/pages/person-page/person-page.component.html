@@ -14,7 +14,7 @@
 
 <div class="line" style="margin-bottom: 20px;"></div>
 
-<app-people-select (selectedPeople)="onSelectPeople($event)"></app-people-select>
+<app-people-select (selectedPeople)="onSelectPeople($event)" (showPeoples)="onShowQueryPeoples($event)"></app-people-select>
 <div style="margin-top: 20px;">
     <app-home-person *ngFor="let item of persons" [person]="item"></app-home-person>
 </div>

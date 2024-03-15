@@ -41,5 +41,15 @@ export enum TableName {
     collect_building = 'collect_building',
     people = 'people',
     person_building = 'collect_building_person',
-    collect_work = 'collect_work'
+    collect_work = 'collect_work',
+    user = 'users'
+}
+
+export interface User {
+    id?: number;
+    user_name?: string;
+    password?: string;
+    real_name?: string;
+    unit?: string;
+    type?: number;
 }

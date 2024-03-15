@@ -10,6 +10,7 @@ import { TableName } from '../../../app-type';
 import { DataService, MessageType } from '../../../services/data.service';
 import { GVar } from '../../../global-variables';
 import { DbService } from '../../../services/db.service';
+import { PhotoComponent } from '../../../components/photo/photo.component';
 
 @Component({
   selector: 'app-home-person',
@@ -88,5 +89,14 @@ export class HomePersonComponent {
       this.person.is_host = 1
       console.log('房主ok')
     })
+  }
+
+  onImgError(){
+    console.log('img error')
+    this.imgUrl = 'assets/noPhoto.png'
+  }
+
+  onShowPhoto(){
+    this.dialog.open(PhotoComponent,{data:this.imgUrl})
   }
 }

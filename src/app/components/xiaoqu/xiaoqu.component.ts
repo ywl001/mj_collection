@@ -10,6 +10,7 @@ import { DataService, MessageType } from '../../services/data.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TableName } from '../../app-type';
 import { DbService } from '../../services/db.service';
+import toastr from 'toastr'
 
 @Component({
   selector: 'app-hosing',
@@ -22,15 +23,15 @@ import { DbService } from '../../services/db.service';
     MatInputModule,
     MatButtonModule,
     MatAutocompleteModule],
-  templateUrl: './hosing.component.html',
-  styleUrl: './hosing.component.scss'
+  templateUrl: './xiaoqu.component.html',
+  styleUrl: './xiaoqu.component.scss'
 })
-export class HosingComponent {
+export class XiaoquComponent {
   data: any = {};
 
   constructor(private dbService: DbService,
     @Inject(MAT_DIALOG_DATA) data: any,
-    private dialogRef: MatDialogRef<HosingComponent>,
+    private dialogRef: MatDialogRef<XiaoquComponent>,
     // private dialog:MatDialog,
     private dataService: DataService) {
     // console.log(data)
@@ -55,9 +56,18 @@ export class HosingComponent {
   ]
 
   onSubmit() {
+    if(!this.data.hosing_name || this.data.hosing_name.tirm()==''){
+      toastr.warning('小区名字必须填写')
+      return;
+    }
     if (!this.data.id) {
       this.dbService.insert('collect_hosing', this.data).subscribe(res => {
-        this.dataService.sendMessage(MessageType.addHosing);
+        if(res>0){
+          toastr.success('添加成功');
+          this.dataService.sendMessage(MessageType.addHosing);
+        }else{
+          toastr.error('添加失败，小区名字必须填写');
+        }
         this.dialogRef.close()
       })
     } else {

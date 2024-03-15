@@ -3,7 +3,6 @@
     <div class="w100 flex">
         <button mat-flat-button color="primary" class="flex-1" (click)="onBack()">返回</button>
         <button mat-flat-button color="primary" class="flex-2" (click)="onExportBuildingPersons()">导出楼栋人员</button>
-        <button mat-flat-button color="primary" class="flex-2" (click)="onEditBuilding()">编辑楼栋</button>
     </div>
 
     <h2>{{hosing.hosing_name}}{{building.building_number}}号楼</h2>
@@ -17,6 +16,7 @@
                 </mat-expansion-panel-header>
 
                 <div *ngFor="let item of unitRoomNumbers" class="list-item" [style.background]="getBgColor(item)"
+                    [style.color]="getFontColor(item)"
                     (click)="onClickRoom(item);$event.stopPropagation();">
                     <span>{{item.room_number}}</span>
                     <span *ngIf="item.result_message"> {{item.result_message}}</span>
