@@ -22,6 +22,14 @@ export class LocalStorgeService {
     return this.localStorage[key] || null;
   }
 
+  public setObject(key:string,value:any){
+    this.localStorage[key] = JSON.stringify(value)
+  }
+
+  public getObject(key:string){
+    return JSON.parse(this.localStorage[key]) || null;
+  }
+
   public remove(key: string): any {
     this.localStorage.removeItem(key);
   }

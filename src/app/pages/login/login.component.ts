@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import toastr from 'toastr'
-import { User } from '../../User';
 import { Router } from '@angular/router';
 import { LocalStorgeService } from '../../services/local-storge.service';
 import { DataService, MessageType } from '../../services/data.service';
 import { DbService } from '../../services/db.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -21,15 +21,17 @@ export class LoginComponent {
   constructor(private sql:DbService,
     private local:LocalStorgeService,
     private dataService:DataService,
+    private userService:UserService,
     private router:Router){
-    if(this.local.get('userId')){
-      User.id = parseInt(this.local.get('userId'))
-      User.user_name = this.local.get('userName')
-      User.password = this.local.get('password')
-      User.real_name = this.local.get('realName')
+    if(this.local.getObject('user')){
+      // User.id = parseInt(this.local.get('userId'))
+      // User.user_name = this.local.get('userName')
+      // User.password = this.local.get('password')
+      // User.real_name = this.local.get('realName')
+      // User.type = parseInt(this.local.get('userType'))
 
-      this.router.navigate(['/hosing'])
-
+      this.userService.user = this.local.getObject('user')
+      this.router.navigate(['/xiaoqu_list'])
       this.dataService.sendMessage(MessageType.getUserInfo)
     }
   }
@@ -40,21 +42,26 @@ export class LoginComponent {
     this.sql.getUserInfo(this.username,this.password).subscribe(res=>{
       if(res.length > 0){
         const user = res[0];
-        console.log(user)
-        User.id = user.user_id;
-        User.user_name = user.user_name;
-        User.real_name = user.real_name;
-        User.password = user.password;
+        // console.log(user)
+        // User.id = user.id;
+        // User.user_name = user.username;
+        // User.real_name = user.real_name;
+        // User.password = user.password;
+        // User.type = user.type;
+        this.userService.user = user;
 
-        console.log(User.id)
+        this.local.set('user',user)
 
-        this.local.set('userName',user.user_name)
-        this.local.set('password',user.password)
-        this.local.set('userId',user.user_id)
-        this.local.set('realName',user.real_name)
+        // console.log(User.id)
+
+        // this.local.set('userName',user.username)
+        // this.local.set('password',user.password)
+        // this.local.set('userId',user.id)
+        // this.local.set('realName',user.real_name)
+        // this.local.set('userType',user.type)
 
 
-        this.router.navigate(['/hosing'])
+        this.router.navigate(['/xiaoqu_list'])
         this.dataService.sendMessage(MessageType.login_success)
 
       }else{

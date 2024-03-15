@@ -1,12 +1,12 @@
 <div class="login-container">
-    <h2>Login</h2>
+    <h2>用户登录</h2>
     <form (ngSubmit)="onSubmit()">
-        <label for="username">Username:</label>
+        <label for="username">用户名:</label>
         <input type="text" id="username" name="username" [(ngModel)]="username" required autocomplete="off">
 
-        <label for="password">Password:</label>
+        <label for="password">密码:</label>
         <input type="password" id="password" name="password" [(ngModel)]="password" required autocomplete="off">
 
-        <button type="submit">Login</button>
+        <button type="submit">登录</button>
     </form>
 </div>

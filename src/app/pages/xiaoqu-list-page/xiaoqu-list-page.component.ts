@@ -1,26 +1,30 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, interval, of } from 'rxjs';
 import { DataService, MessageType } from '../../services/data.service';
 import { MatButtonModule } from '@angular/material/button';
-import { HosingComponent } from '../../components/hosing/hosing.component';
+import { XiaoquComponent } from '../../components/xiaoqu/xiaoqu.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GVar } from '../../global-variables';
 import { User } from '../../User';
 import { LongPressDirective } from '../../longpress';
 import { DbService } from '../../services/db.service';
+import { RegisterComponent } from '../../components/register/register.component';
 
 @Component({
   selector: 'app-hosings',
   standalone: true,
-  imports: [NgFor, MatButtonModule,LongPressDirective],
-  templateUrl: './hosings-page.component.html',
-  styleUrl: './hosings-page.component.scss'
+  imports: [NgFor, MatButtonModule,LongPressDirective,NgIf],
+  templateUrl: './xiaoqu-list-page.component.html',
+  styleUrl: './xiaoqu-list-page.component.scss'
 })
-export class HosingsPageComponent {
+export class XiaoquListPageComponent {
 
   hosings: any[] = []
+
+  isShowRegister:boolean = false;
+
 
   @Output()
   buildings = new EventEmitter()
@@ -30,10 +34,12 @@ export class HosingsPageComponent {
     // private sql: SqlService,
     private dbService:DbService,
     private router: Router) {
-      console.log(User.real_name)
+      // console.log(User.real_name)
       if(!User.id){
         this.router.navigate([''])
       }
+
+      this.isShowRegister = User.type == 1;
   }
 
   private sub1:Subscription
@@ -57,25 +63,29 @@ export class HosingsPageComponent {
     })
   }
 
-  onSelectHosing(hosing: any) {
-    console.log(hosing)
-    GVar.current_hosing = hosing;
-    this.router.navigate(['/buildings'], { queryParams: { hosing_id: hosing.id } })
+  onSelectHosing(xiaoqu: any) {
+    console.log(xiaoqu)
+    GVar.current_xiaoqu = xiaoqu;
+    this.router.navigate(['/xiaoqu',{ xqId: xiaoqu.id,xqName:xiaoqu.hosing_name }])
   }
 
   onAddHosing() {
     // this.dataService.openDialog(HosingComponent, null)
-    this.dialog.open(HosingComponent, null)
+    this.dialog.open(XiaoquComponent, null)
   }
 
   onEditHosing(hosing) {
     console.log(hosing)
-    this.dialog.open(HosingComponent, { data: hosing })
+    this.dialog.open(XiaoquComponent, { data: hosing })
     // this.dataService.openDialog(HosingComponent, hosing)
   }
 
   onLongPress(hosing){
     console.log('edit hosing')
-    this.dialog.open(HosingComponent, { data: hosing })
+    this.dialog.open(XiaoquComponent, { data: hosing })
+  }
+
+  onRigiste(){
+    this.dialog.open(RegisterComponent)
   }
 }

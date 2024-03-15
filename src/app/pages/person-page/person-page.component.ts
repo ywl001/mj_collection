@@ -23,6 +23,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { PersonExtensionDialogComponent } from '../../components/person-extension-dialog/person-extension-dialog.component';
 import { DbService } from '../../services/db.service';
+import { PeopleListComponent } from '../../components/people-list/people-list.component';
 
 @Component({
   selector: 'app-person-page',
@@ -59,7 +60,7 @@ export class PersonPageComponent {
     this.building_id = route.snapshot.queryParams['building_id'];
     this.room_number = route.snapshot.queryParams['room_number'];
     console.log('person-page', this.building_id, this.room_number);
-    this.hosingName = GVar.current_hosing?.hosing_name
+    this.hosingName = GVar.current_xiaoqu?.hosing_name
     this.buildingName = GVar.current_building?.building_number + '号楼';
   }
 
@@ -222,5 +223,9 @@ export class PersonPageComponent {
   onErrorWork() {
     const data = { building_id: this.building_id, room_number: this.room_number }
     this.dialog.open(RoomErrorComponent, { data: data })
+  }
+
+  onShowQueryPeoples(peoples){
+    this.dialog.open(PeopleListComponent,{data:peoples})
   }
 }

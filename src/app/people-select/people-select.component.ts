@@ -5,6 +5,7 @@ import { AddNewPeopleComponent } from './add-new-people/add-new-people.component
 import { PeopleItemComponent } from './people-item/people-item.component';
 import { SearchComponent } from './search/search.component';
 import { NgFor, NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 enum peopleState {
   query,
@@ -15,7 +16,7 @@ enum peopleState {
 @Component({
   selector: 'app-people-select',
   standalone:true,
-  imports:[AddNewPeopleComponent,PeopleItemComponent,SearchComponent,NgIf,NgFor],
+  imports:[AddNewPeopleComponent,PeopleItemComponent,SearchComponent,NgIf,NgFor,MatButtonModule],
   templateUrl: './people-select.component.html',
   styleUrls: ['./people-select.component.scss']
 })
@@ -23,6 +24,9 @@ export class PeopleSelectComponent {
 
   @Output()
   selectedPeople: EventEmitter<People>=new EventEmitter();
+
+  @Output()
+  showPeoples: EventEmitter<People[]>=new EventEmitter();
 
   isShowQuery: boolean
   isShowPeoples: boolean
@@ -56,6 +60,10 @@ export class PeopleSelectComponent {
 
   onCancelAddNew(){
     this.setState(peopleState.queryComplete)
+  }
+
+  onShowBigPhoto(){
+    this.showPeoples.emit(this.queryPeoples)
   }
 
   private setState(state: peopleState) {

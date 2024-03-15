@@ -1,19 +1,19 @@
 import { Component, HostListener } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { HosingsPageComponent } from './pages/hosings-page/hosings-page.component';
+import { XiaoquListPageComponent } from './pages/xiaoqu-list-page/xiaoqu-list-page.component';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from './services/data.service';
 import { of } from 'rxjs';
 import { BuildingPageComponent } from './pages/building-page/building-page.component';
-import { BuildingsPageComponent } from './pages/buildings-page/buildings-page.component';
+import { XiaoquPageComponent } from './pages/xiaoqu-page/xiaoqu-page.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Dialog } from '@angular/cdk/dialog';
-import { User } from './User';
 import { LongPressDirective } from './longpress';
 import { DbService } from './services/db.service';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
+import { UserService } from './services/user.service';
 
 
 @Component({
@@ -22,9 +22,9 @@ import * as XLSX from 'xlsx';
   imports: [RouterOutlet,
     MatButtonModule,
     MatDialogModule,
-    HosingsPageComponent,
+    XiaoquListPageComponent,
     NgIf, NgFor,
-    BuildingsPageComponent,
+    XiaoquPageComponent,
     LongPressDirective,
   ],
   templateUrl: './app.component.html',
@@ -36,6 +36,7 @@ export class AppComponent {
   userName = ''
 
   constructor(private dataService: DataService,
+    private userService:UserService,
     private dbService:DbService,
     private router: Router) {
   }
@@ -43,23 +44,25 @@ export class AppComponent {
   ngOnInit() {
     console.log(moment().format('yyyy-DD-DD'))
     this.dataService.message$.subscribe(res => {
-      if (res == MessageType.getUserInfo) {
-        this.userName = User.real_name.substring(0, 1)
-      }if(res == MessageType.login_success){
-        this.userName = User.real_name.substring(0, 1)
+      if (res == MessageType.getUserInfo || res == MessageType.login_success) {
+        this.userName = this.userService.user?.real_name
       }
     })
 
     this.dataService.selectDate$.subscribe(res=>{
-      this.dbService.getUserInserPersons(User.id,res).subscribe(res=>{
-        console.log(res)
-        this.saveSheet(res)
-      })
+      if(this.userService.user){
+        this.dbService.getUserInsertPersons(this.userService.user?.id,res).subscribe(res=>{
+          console.log(res)
+          this.saveSheet(res)
+        })
+      }
     })
   }
 
   onGetUserWork() {
-    this.router.navigate(['/userwork'])
+    if(this.userName && this.userName!=''){
+      this.router.navigate(['/userwork'])
+    }
   }
 
   // @HostListener('window:scroll', ['$event'])

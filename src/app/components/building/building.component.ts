@@ -77,8 +77,11 @@ export class BuildingComponent {
       } else {
         const tableData = Object.assign({}, this.data, { unit_home: this.getUnitData() })
         this.dbService.update(TableName.collect_building, tableData, this.data.id).subscribe(res => {
-          console.log(res);
-          this.dataService.sendMessage(MessageType.editBuilding);
+          console.log(res)
+          if(res){
+            this.dataService.sendMessage(MessageType.editBuilding);
+            toastr.info('编辑楼栋成功')
+          }
           this.dialog.close();
         })
       }

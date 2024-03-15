@@ -1,0 +1,6 @@
+<div class="container">
+    <div class="people" *ngFor="let item of peoples" (click)="onClick()">
+        <img [src]="getPhotoUrl(item)" (error)="onImgError($event)">
+        <div class="pname">{{getPeopleInfo(item)}}</div>
+    </div>
+</div>
