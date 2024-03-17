@@ -27,7 +27,9 @@ export class LocalStorgeService {
   }
 
   public getObject(key:string){
-    return JSON.parse(this.localStorage[key]) || null;
+    if(this.localStorage[key])
+      return JSON.parse(this.localStorage[key]);
+    return null
   }
 
   public remove(key: string): any {

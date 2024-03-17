@@ -11,6 +11,7 @@ import { DbService } from '../../services/db.service';
 import { LongPressDirective } from '../../longpress';
 import { QcodeComponent } from '../../components/qcode/qcode.component';
 import { GlobalService } from '../../global.service';
+import { RouterPath } from '../../app-type';
 
 @Component({
   selector: 'app-buildings',
@@ -23,7 +24,7 @@ export class XiaoquPageComponent {
 
   buildings = []
   xiaoquId;
-  xiaoqu;
+  xiaoquName:string;
   constructor(private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute,
@@ -33,11 +34,18 @@ export class XiaoquPageComponent {
     private location: Location) {
 
     console.log('xiaoqu construstor')
-    if (!gs.user || !gs.current_xiaoqu) {
+    if (!gs.user) {
       this.router.navigate([''])
     }
-    this.xiaoqu = gs.current_xiaoqu
-    this.xiaoquId = this.xiaoqu.id
+    // this.xiaoquId = route.snapshot.params['xqId'];
+    // this.xiaoquName = route.snapshot.params['xqName'];
+    // this.xiaoquId = this.xiaoqu.id
+
+    this.route.params.subscribe(params=>{
+      const {xqId,xqName} = gs.parseData(params[RouterPath.xiaoqu]);
+      this.xiaoquId = xqId;
+      this.xiaoquName = xqName;
+    })
   }
 
   private sub1: Subscription
@@ -69,7 +77,7 @@ export class XiaoquPageComponent {
     this.gs.panelIndex = -1;
     this.gs.savedScrollPosition = 0;
 
-    this.router.navigate(['/building'],{queryParams:building})
+    this.router.navigate([RouterPath.building,this.gs.serailizeData({building:building,xqName:this.xiaoquName})])
   }
   onBack() {
     this.location.back()
@@ -86,9 +94,8 @@ export class XiaoquPageComponent {
   }
 
   onCreateQCode() {
-    const pre = 'http://114.115.201.238/caiji/'
-    const url = pre+this.route.snapshot.url.join('/');
-    this.dialog.open(QcodeComponent, { data: {url:url,name:this.xiaoqu.hosing_name}})
+    const url = `http://114.115.201.238/caiji/xiaoqu;xqId=${this.xiaoquId};xqName=${this.xiaoquName}`
+    this.dialog.open(QcodeComponent, { data: {url:encodeURI(url),name:this.xiaoquName}})
   }
 }
 

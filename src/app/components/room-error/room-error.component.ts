@@ -5,9 +5,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { mergeMap } from 'rxjs';
-import { User } from '../../User';
 import { Work, TableName } from '../../app-type';
 import { DbService } from '../../services/db.service';
+import { GlobalService } from '../../global.service';
 
 
 @Component({
@@ -29,6 +29,7 @@ export class RoomErrorComponent {
   private room_number;
   constructor(private sql:DbService,
     @Inject(MAT_DIALOG_DATA) data: any,
+    private gs:GlobalService,
     private dialogRef:MatDialogRef<RoomErrorComponent>){
       this.building_id = data.building_id;
       this.room_number = data.room_number
@@ -58,7 +59,7 @@ export class RoomErrorComponent {
       room_number: this.room_number,
       result_message: this.result_message,
       result: 0,
-      user_id: User.id
+      user_id: this.gs.user.id
     }
     return this.sql.insert(TableName.collect_work, tableData)
   }
@@ -67,7 +68,7 @@ export class RoomErrorComponent {
     const tableData: Work = {
       result_message: this.result_message,
       result: 0,
-      user_id: User.id
+      user_id: this.gs.user.id
     }
     return this.sql.update(TableName.collect_work, tableData, id)
   }

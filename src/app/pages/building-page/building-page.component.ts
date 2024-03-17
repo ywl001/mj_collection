@@ -1,18 +1,17 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Building, Hosing } from '../../app-type';
+import { Building, Hosing, RouteParams, RouterPath } from '../../app-type';
 import {  MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { GVar } from '../../global-variables';
-import { User } from '../../User';
 import { MatDialog } from '@angular/material/dialog';
 import { BuildingComponent } from '../../components/building/building.component';
 import { Subscription } from 'rxjs';
 import { DbService } from '../../services/db.service';
 import * as XLSX from 'xlsx';
+import { GlobalService } from '../../global.service';
 
 @Component({
   selector: 'app-building',
@@ -32,15 +31,15 @@ export class BuildingPageComponent {
     private dbService:DbService,
     private location: Location,
     private dialog: MatDialog,
-    private dataService: DataService,
-    route: ActivatedRoute) {
-    if (!User.id || !GVar.current_building) {
+    route: ActivatedRoute,
+    private gs:GlobalService) {
+    if (!gs.user || !gs.current_xiaoqu) {
       this.router.navigate([''])
     }
-    if(GVar.current_building){
-      this.building = GVar.current_building;
-      this.hosing = GVar.current_xiaoqu;
-    }
+
+    const {building,xqName} = gs.parseData(route.snapshot.params['building'])
+    this.building = building;
+    this.xqName = xqName;
   }
 
   @Input()
@@ -52,12 +51,9 @@ export class BuildingPageComponent {
 
   scrollPosition;
 
-  hosing: Hosing;
+  xqName: string;
 
   getBgColor(item): string {
-    if(item.result_message == '0人'){
-      return 'white';
-    }
     if(item.user_id > 10000){
       return 'blue'
     }
@@ -84,23 +80,15 @@ export class BuildingPageComponent {
     this.getBuildingWorkInfo().subscribe(res=>{
       this.buildingInfos = res;
     })
-    this.sub1 = this.dataService.message$.subscribe(res => {
-      if (res == MessageType.editBuilding) {
-        console.log('编辑楼栋后刷新')
-        console.log(res)
-      }
-    })
   }
 
   ngAfterViewInit(): void {
-    console.log(this.accordionContainer)
-    console.log(GVar.panelIndex,this.panels)
-    if (GVar.panelIndex >= 0) {
+    if (this.gs.panelIndex >= 0) {
       this.getBuildingWorkInfo().subscribe(res=>{
         this.buildingInfos = res;
-        const panelToOpen = this.panels.toArray()[GVar.panelIndex];
+        const panelToOpen = this.panels.toArray()[this.gs.panelIndex];
         panelToOpen.opened.subscribe(res=>{
-          this.scrollPosition = GVar.savedScrollPosition
+          this.scrollPosition = this.gs.savedScrollPosition
         })
         panelToOpen.open();
       })
@@ -128,7 +116,7 @@ export class BuildingPageComponent {
 
   onScroll(event: Event): void {
     const scrollPosition = (event.target as Element).scrollTop;
-    GVar.savedScrollPosition = scrollPosition;
+    this.gs.savedScrollPosition = scrollPosition;
   }
 
   private numToArray(num) {
@@ -137,7 +125,8 @@ export class BuildingPageComponent {
 
   onClickUnit(unit) {
     // console.log(unit)
-    GVar.panelIndex = unit;
+    this.gs.panelIndex = unit;
+   
     this.unitRoomNumbers = this.createUnitArray(unit)
   }
 
@@ -180,13 +169,21 @@ export class BuildingPageComponent {
 
   onClickRoom(room) {
     //导航到person-page,building-id,room-number
-    this.router.navigate(['person'], { queryParams: { building_id: this.building.id, room_number: room.room_number } })
+    this.gs.current_room_number = room.room_number
+
+    const data:RouteParams={
+      xqName:this.xqName,
+      buildingId:this.building.id,
+      roomNumber:room.room_number,
+      buildingNumber:this.building.building_number
+    }
+    this.router.navigate([RouterPath.person,this.gs.serailizeData(data)])
   }
 
-  onEditBuilding() {
-    const data = Object.assign({}, this.building, { hosingId: this.hosing.id })
-    this.dialog.open(BuildingComponent, { data: this.building })
-  }
+  // onEditBuilding() {
+  //   const data = Object.assign({}, this.building, { hosingId: this.hosing.id })
+  //   this.dialog.open(BuildingComponent, { data: this.building })
+  // }
 
   onExportBuildingPersons(){
     this.dbService.getUserBuildingPersons(this.building.id).subscribe(res=>{

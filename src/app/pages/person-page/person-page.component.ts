@@ -14,16 +14,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { PeopleSelectComponent } from '../../people-select/people-select.component';
 import { People } from '../../Person';
 import { DataService, MessageType } from '../../services/data.service';
-import { Person_building, TableName, Work } from '../../app-type';
-import { User } from '../../User';
+import { Person_building, RouteParams, RouterPath, TableName, Work } from '../../app-type';
 import { RoomErrorComponent } from '../../components/room-error/room-error.component';
-import { GVar } from '../../global-variables';
 import toastr from 'toastr'
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { PersonExtensionDialogComponent } from '../../components/person-extension-dialog/person-extension-dialog.component';
 import { DbService } from '../../services/db.service';
 import { PeopleListComponent } from '../../components/people-list/people-list.component';
+import { GlobalService } from '../../global.service';
 
 @Component({
   selector: 'app-person-page',
@@ -36,8 +35,8 @@ export class PersonPageComponent {
 
   persons: People[] = [];
 
-  building_id:number;
-  room_number:string;
+  building_id: number;
+  room_number: string;
   hosingName: string = '';
   buildingName: string;
 
@@ -49,19 +48,22 @@ export class PersonPageComponent {
 
   constructor(private dataService: DataService,
     private router: Router,
-    private route: ActivatedRoute,
     private dialog: MatDialog,
-    // private sql: SqlService,
     private dbService: DbService,
+    route:ActivatedRoute,
+    private gs: GlobalService,
     private location: Location) {
-    if (!User.id) {
+    if (!gs.user) {
       this.router.navigate([''])
     }
-    this.building_id = route.snapshot.queryParams['building_id'];
-    this.room_number = route.snapshot.queryParams['room_number'];
-    console.log('person-page', this.building_id, this.room_number);
-    this.hosingName = GVar.current_xiaoqu?.hosing_name
-    this.buildingName = GVar.current_building?.building_number + '号楼';
+
+    route.params.subscribe(params=>{
+      const data:RouteParams = this.gs.parseData(params[RouterPath.person])
+      this.building_id = data.buildingId
+      this.room_number = data.roomNumber
+      this.hosingName = data.xqName;
+      this.buildingName = data.buildingNumber + '号楼';
+    })
   }
 
   //选择人员组件选择人员后
@@ -101,7 +103,7 @@ export class PersonPageComponent {
       res.forEach(p => {
         if (!this.checkPersonIsExist(p)) {
           p.is_host = 0;
-          p.is_huji = GVar.homePeopleHost.is_huji;
+          p.is_huji = this.gs.homePeopleHost.is_huji;
           console.log('one home', p)
           this.insertPeopleToBuilding(p).subscribe(res => {
             p.pb_id = res;
@@ -130,6 +132,7 @@ export class PersonPageComponent {
     console.log('on destory')
     if (this.sub1) this.sub1.unsubscribe();
     if (this.sub2) this.sub2.unsubscribe();
+    this.gs.userRecord = null
   }
 
   //获取房间人员
@@ -174,7 +177,7 @@ export class PersonPageComponent {
       room_number: this.room_number,
       person_id: p.id,
       is_host: p.is_host,
-      user_id: User.id,
+      user_id: this.gs.user.id,
       is_huji: p.is_huji
     }
     return this.dbService.insert(TableName.person_building, tableData)
@@ -199,7 +202,7 @@ export class PersonPageComponent {
       room_number: this.room_number,
       result_message: this.persons.length + '人',
       result: 1,
-      user_id: User.id,
+      user_id: this.gs.user.id,
       use_for: this.residence_type
     }
     console.log('插入work table' + tableData)
@@ -207,17 +210,18 @@ export class PersonPageComponent {
   }
 
   private updateWork(id) {
-    let tableData: Work = {
-      result_message: this.persons.length + '人',
-      result: 1,
-      user_id: User.id,
-      use_for: this.residence_type
+    if(this.persons.length == 0){
+      return this.dbService.delete(TableName.collect_work,id)
+    }else{
+      let tableData: Work = {
+        result_message: this.persons.length + '人',
+        result: 1,
+        user_id: this.gs.user.id,
+        use_for: this.residence_type
+      }
+      console.log('更新 work table', tableData)
+      return this.dbService.update(TableName.collect_work, tableData, id)
     }
-    if (tableData.result_message == '0人') {
-      tableData.result = 0;
-    }
-    console.log('更新 work table', tableData)
-    return this.dbService.update(TableName.collect_work, tableData, id)
   }
 
   onErrorWork() {
@@ -225,7 +229,7 @@ export class PersonPageComponent {
     this.dialog.open(RoomErrorComponent, { data: data })
   }
 
-  onShowQueryPeoples(peoples){
-    this.dialog.open(PeopleListComponent,{data:peoples})
+  onShowQueryPeoples(peoples) {
+    this.dialog.open(PeopleListComponent, { data: peoples })
   }
 }

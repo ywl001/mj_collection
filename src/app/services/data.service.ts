@@ -1,9 +1,9 @@
 // data.service.ts
 
-import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { People } from '../Person';
+import { User } from '../app-type';
 
 
 export enum MessageType {
@@ -21,7 +21,7 @@ export enum MessageType {
   uploadPhotoComplete='uploadPhotoComplete',
   addHosing = 'addHosing',
   getUserInfo = 'getUserInfo',
-  login_success = 'login_success'
+  // login_success = 'login_success'
   // closeDialog = 'closeDialog'
 }
 
@@ -60,6 +60,12 @@ export class DataService {
   selectDate$ = this._selectDate.asObservable();
   selectDate(selectDate:any) {
     this._selectDate.next(selectDate);
+  }
+
+  private _login = new Subject<User>();
+  login$ = this._login.asObservable();
+  login(user:User) {
+    this._login.next(user);
   }
 
   // private routeData: any={};

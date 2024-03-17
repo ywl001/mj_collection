@@ -5,7 +5,7 @@
         <button mat-flat-button color="primary" class="flex-2" (click)="onExportBuildingPersons()">导出楼栋人员</button>
     </div>
 
-    <h2>{{hosing.hosing_name}}{{building.building_number}}号楼</h2>
+    <h2>{{xqName}}{{building.building_number}}号楼</h2>
     <div class="accordion-container" #accordionContainer (scroll)="onScroll($event)">
         <mat-accordion displayMode="flat" #matAccordion>
             <mat-expansion-panel *ngFor="let unit of building.unit_home;index as i" (opened)="onClickUnit(i)">

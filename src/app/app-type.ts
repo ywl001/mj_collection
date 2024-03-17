@@ -35,6 +35,15 @@ export interface Hosing {
     hosing_name?:string
 }
 
+export enum RouterPath{
+    xiaoqu_list = 'xiaoqu_list',
+    login = 'login',
+    xiaoqu='xiaoqu',
+    building='building',
+    person='person',
+    userwork='userwork'
+}
+
 
 export enum TableName {
     collect_hosing = 'collect_hosing',
@@ -52,4 +61,12 @@ export interface User {
     real_name?: string;
     unit?: string;
     type?: number;
+}
+
+export interface RouteParams{
+    xqId?:number
+    xqName?:string
+    buildingId?:number
+    buildingNumber?:string
+    roomNumber?:string
 }

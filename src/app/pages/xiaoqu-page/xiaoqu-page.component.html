@@ -6,7 +6,7 @@
     </div>
 
 
-    <h1 style="margin-top: 10px;">{{hosing.hosing_name}}</h1>
+    <h1 style="margin-top: 10px;">{{xiaoquName}}</h1>
     <div class="line"></div>
 
     <div *ngFor="let item of buildings" class="hosing" (click)="onSelectBuilding(item)" longPress (mouseLongPress)="onEditBuildting(item)">{{item.building_number}}号楼</div>

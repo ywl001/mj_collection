@@ -8,9 +8,9 @@ import Swal from 'sweetalert2';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { TableName } from '../../../app-type';
 import { DataService, MessageType } from '../../../services/data.service';
-import { GVar } from '../../../global-variables';
 import { DbService } from '../../../services/db.service';
 import { PhotoComponent } from '../../../components/photo/photo.component';
+import { GlobalService } from '../../../global.service';
 
 @Component({
   selector: 'app-home-person',
@@ -51,6 +51,7 @@ export class HomePersonComponent {
     private cdr:ChangeDetectorRef,
     // private sql:SqlService,
     private dbService:DbService,
+    private gs:GlobalService,
     private dataService:DataService){}
 
   onEditPerson(){
@@ -58,7 +59,8 @@ export class HomePersonComponent {
   }
 
   onGetHomePeoples(){
-    GVar.homePeopleHost = this.person
+    //保存查询同户人的信息，主要时is_huji 信息
+    this.gs.homePeopleHost = this.person
     this.dbService.getHomePeoples(this.person.id).subscribe(res=>{
       console.log(res)
       this.dialog.open(SelectHomePersonsComponent,{data:res})

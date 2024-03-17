@@ -10,6 +10,7 @@ import { LongPressDirective } from '../../longpress';
 import { DbService } from '../../services/db.service';
 import { RegisterComponent } from '../../components/register/register.component';
 import { GlobalService } from '../../global.service';
+import { RouterPath } from '../../app-type';
 
 @Component({
   selector: 'app-hosings',
@@ -30,11 +31,9 @@ export class XiaoquListPageComponent {
 
   constructor(private dataService: DataService,
     private dialog: MatDialog,
-    // private sql: SqlService,
     private gs:GlobalService,
     private dbService:DbService,
     private router: Router) {
-      // console.log(User.real_name)
       if(!gs.user){
         this.router.navigate([''])
       }
@@ -57,28 +56,28 @@ export class XiaoquListPageComponent {
       this.sub1.unsubscribe();
   }
 
+  /**获取所有小区 */
   private getAllHosing() {
     this.dbService.getAllHosing().subscribe(res => {
       this.hosings = res
     })
   }
 
+  // encodeURIComponent(JSON.stringify(building))
   onSelectHosing(xiaoqu: any) {
-    console.log(xiaoqu)
+    // console.log(xiaoqu)
     this.gs.current_xiaoqu = xiaoqu;
-    this.router.navigate(['/xiaoqu',{ xqId: xiaoqu.id,xqName:xiaoqu.hosing_name }])
+    const data={
+      xqId:xiaoqu.id,
+      xqName:xiaoqu.hosing_name
+    }
+    this.router.navigate([RouterPath.xiaoqu,this.gs.serailizeData(data)])
   }
 
   onAddHosing() {
     // this.dataService.openDialog(HosingComponent, null)
     this.dialog.open(XiaoquComponent, null)
   }
-
-  // onEditHosing(hosing) {
-  //   console.log(hosing)
-  //   this.dialog.open(XiaoquComponent, { data: hosing })
-  //   // this.dataService.openDialog(HosingComponent, hosing)
-  // }
 
   onLongPress(hosing){
     console.log('edit hosing')

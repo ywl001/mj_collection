@@ -7,7 +7,8 @@ import { DbService } from '../../services/db.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExportDataComponent } from '../../components/export-data/export-data.component';
 import { DataService, MessageType } from '../../services/data.service';
-import { UserService } from '../../services/user.service';
+import { GlobalService } from '../../global.service';
+import { RouteParams, RouterPath } from '../../app-type';
 
 @Component({
   selector: 'app-work-page',
@@ -26,16 +27,16 @@ export class WorkPageComponent {
     private local:LocalStorgeService,
     private dataService:DataService,
     private dialog:MatDialog,
-    private userService:UserService,
+    private gs:GlobalService,
     private router: Router) {
-    if (!userService.user) {
+    if (!gs.user) {
       this.router.navigate([''])
     }
   }
 
   ngOnInit(): void {
-    this.sql.getUserWork(this.userService.user.id).subscribe(res => {
-      // console.log(res)
+    this.sql.getUserWork(this.gs.user.id).subscribe(res => {
+      console.log(res)
       this.works = res;
     })
   }
@@ -46,12 +47,25 @@ export class WorkPageComponent {
 
   onLogout(){
     this.local.clear();
-    this.userService.user = null;
-    this.dataService.sendMessage(MessageType.getUserInfo)
-    this.router.navigate(['/login'])
+    this.gs.user = null;
+    this.router.navigate([RouterPath.login])
   }
 
   onExportData(){
     this.dialog.open(ExportDataComponent)
+  }
+
+  onClick(item){
+    console.log(item)
+    this.gs.userRecord = item;
+
+    const data:RouteParams={
+      xqName:item.hosing_name,
+      buildingId:item.building_id,
+      roomNumber:item.room_number,
+      buildingNumber:item.building_number
+    }
+
+    this.router.navigate([RouterPath.person,this.gs.serailizeData(data)])
   }
 }

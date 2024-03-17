@@ -74,7 +74,7 @@ export class SearchComponent {
     iconRegistry: MatIconRegistry,
     private cdr: ChangeDetectorRef,
     private sql: DbService) {
-    this.regiteIcon(sanitizer, iconRegistry);
+    this.registIcon(sanitizer, iconRegistry);
   }
 
   ngOnInit() {
@@ -143,7 +143,7 @@ export class SearchComponent {
     return phoneRegex.test(phoneNumber);
   }
 
-  private regiteIcon(sanitizer: DomSanitizer, iconRegistry: MatIconRegistry) {
+  private registIcon(sanitizer: DomSanitizer, iconRegistry: MatIconRegistry) {
 
     iconRegistry.addSvgIconLiteral(
       IconName.clear,

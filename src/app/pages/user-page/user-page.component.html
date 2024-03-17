@@ -4,8 +4,9 @@
     <button mat-flat-button color="primary" class="flex-2" (click)="onLogout()">退出登录</button>
 </div>
 <div class="root">
-    <div class="list-item" *ngFor="let item of works">
+    <div class="list-item" *ngFor="let item of works" (click)="onClick(item)">
         <span>{{item.hosing_name+item.building_number+'号楼'+item.room_number}}</span>
+        <span>{{item.result_message}}</span>
         <span>{{item.insert_time.substring(0,11)}}</span>
     </div>
 </div>
