@@ -1,18 +1,7 @@
-<!-- <div *ngIf="appState===0" class="root">
-  <button mat-flat-button color="primary" class="w100" *ngIf="appState===0">添加小区</button>
-  <div class="line"></div>
-  <div *ngFor="let item of hosings" class="hosing" (click)="onSelectHosing(item)">{{item}}</div>
-</div>
-
-<div *ngIf="appState===1" class="root">
-  
-</div>
-
-<div *ngIf="appState===2" class="root">
-
-</div>
-
-<app-building></app-building> -->
 <router-outlet></router-outlet>
 
-<div class="user-icon" (click)="onGetUserWork()" *ngIf="userName" >{{userName}}</div>
+@if (userName) {
+  <div class="user-icon" (click)="onGetUserWork()">{{userName}}</div>
+}
+
+<app-loading></app-loading>

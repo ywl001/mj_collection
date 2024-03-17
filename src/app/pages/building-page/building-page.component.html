@@ -8,20 +8,19 @@
     <h2>{{xqName}}{{building.building_number}}号楼</h2>
     <div class="accordion-container" #accordionContainer (scroll)="onScroll($event)">
         <mat-accordion displayMode="flat" #matAccordion>
-            <mat-expansion-panel *ngFor="let unit of building.unit_home;index as i" (opened)="onClickUnit(i)">
+            @for (item of building.unit_home; track item;let i = $index) {
+            <mat-expansion-panel (opened)="onClickUnit(i)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         {{i+1}}单元
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <div *ngFor="let item of unitRoomNumbers" class="list-item" [style.background]="getBgColor(item)"
-                    [style.color]="getFontColor(item)"
-                    (click)="onClickRoom(item);$event.stopPropagation();">
-                    <span>{{item.room_number}}</span>
-                    <span *ngIf="item.result_message"> {{item.result_message}}</span>
-                </div>
+                @for (item of unitRoomNumbers; track $index) {
+                    <app-room-item [data]="item"></app-room-item>
+                }
             </mat-expansion-panel>
+            }
         </mat-accordion>
     </div>
 </div>

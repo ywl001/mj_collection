@@ -70,3 +70,14 @@ export interface RouteParams{
     buildingNumber?:string
     roomNumber?:string
 }
+
+export interface personPageData{
+    xqName:string
+    buildingId:number
+    buildingNumber:string
+    roomNumber:string
+    result?:number
+    resultMessage?:string
+    type:string
+    userId?:number
+}

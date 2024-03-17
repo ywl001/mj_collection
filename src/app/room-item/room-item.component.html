@@ -1,0 +1,13 @@
+<div class="list-item" [style.background]="getBgColor()" [style.color]="getFontColor()"
+    (click)="onClickRoom();$event.stopPropagation();">
+   
+    <span>
+        @if (data.type=='user') {
+            <span>{{data.xqName+data.buildingNumber+'号楼'}}</span>
+        }
+        {{data.roomNumber}}
+    </span>
+    @if (data.resultMessage) {
+        <span> {{data.resultMessage}}</span>
+    }
+</div>

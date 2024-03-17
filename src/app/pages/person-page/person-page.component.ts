@@ -1,20 +1,17 @@
 import { Component } from '@angular/core';
 
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import { Location, NgFor } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 import { HomePersonComponent } from './home-person/home-person.component';
-
-
-import { Subscription, forkJoin, mergeMap, take, tap } from 'rxjs';
-import { Dialog } from '@angular/cdk/dialog';
+import { Subscription, mergeMap, take } from 'rxjs';
 
 import { MatDialog } from '@angular/material/dialog';
 import { PeopleSelectComponent } from '../../people-select/people-select.component';
 import { People } from '../../Person';
 import { DataService, MessageType } from '../../services/data.service';
-import { Person_building, RouteParams, RouterPath, TableName, Work } from '../../app-type';
+import { Person_building, RouteParams, RouterPath, TableName, Work, personPageData } from '../../app-type';
 import { RoomErrorComponent } from '../../components/room-error/room-error.component';
 import toastr from 'toastr'
 import { MatRadioModule } from '@angular/material/radio';
@@ -27,7 +24,7 @@ import { GlobalService } from '../../global.service';
 @Component({
   selector: 'app-person-page',
   standalone: true,
-  imports: [MatButtonModule, PeopleSelectComponent, NgFor, HomePersonComponent, MatRadioModule, FormsModule],
+  imports: [MatButtonModule, PeopleSelectComponent, HomePersonComponent, MatRadioModule, FormsModule],
   templateUrl: './person-page.component.html',
   styleUrl: './person-page.component.scss'
 })
@@ -37,7 +34,7 @@ export class PersonPageComponent {
 
   building_id: number;
   room_number: string;
-  hosingName: string = '';
+  xiaoquName: string = '';
   buildingName: string;
 
   residence_types = [
@@ -58,10 +55,10 @@ export class PersonPageComponent {
     }
 
     route.params.subscribe(params=>{
-      const data:RouteParams = this.gs.parseData(params[RouterPath.person])
+      const data:personPageData = this.gs.parseData(params[RouterPath.person])
       this.building_id = data.buildingId
       this.room_number = data.roomNumber
-      this.hosingName = data.xqName;
+      this.xiaoquName = data.xqName;
       this.buildingName = data.buildingNumber + '号楼';
     })
   }

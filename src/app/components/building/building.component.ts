@@ -15,7 +15,7 @@ import { DbService } from '../../services/db.service';
 @Component({
   selector: 'app-building',
   standalone: true,
-  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatCheckboxModule, MatInputModule, NgIf, MatDialogModule],
+  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatCheckboxModule, MatInputModule, MatDialogModule],
   templateUrl: './building.component.html',
   styleUrl: './building.component.scss'
 })

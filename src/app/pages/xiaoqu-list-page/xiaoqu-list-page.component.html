@@ -2,7 +2,10 @@
     <button mat-flat-button color="primary" class="flex-1" (click)="onAddHosing()">添加小区</button>
     <button mat-flat-button color="primary" class="flex-1" (click)="onRigiste()" *ngIf="isShowRegister">注册</button>
     <div class="line"></div>
-    <div class="rounded-rectangle" *ngFor="let item of hosings" (click)="onSelectHosing(item)" longPress (mouseLongPress)="onLongPress(item)">
-        {{item.hosing_name}}
-    </div>
+
+    @for (item of hosings; track $index) {
+        <div class="rounded-rectangle" (click)="onSelectHosing(item)" longPress (mouseLongPress)="onLongPress(item)">
+            {{item.hosing_name}}
+        </div>
+    }
 </div>

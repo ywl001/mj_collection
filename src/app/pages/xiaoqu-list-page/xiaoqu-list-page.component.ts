@@ -15,7 +15,7 @@ import { RouterPath } from '../../app-type';
 @Component({
   selector: 'app-hosings',
   standalone: true,
-  imports: [NgFor, MatButtonModule,LongPressDirective,NgIf],
+  imports: [MatButtonModule,LongPressDirective,NgIf],
   templateUrl: './xiaoqu-list-page.component.html',
   styleUrl: './xiaoqu-list-page.component.scss'
 })

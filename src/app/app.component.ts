@@ -15,18 +15,15 @@ import moment from 'moment';
 import * as XLSX from 'xlsx';
 import { GlobalService } from './global.service';
 import { RouterPath } from './app-type';
+import { LoadingComponent } from './components/loading/loading.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet,
-    MatButtonModule,
-    MatDialogModule,
-    XiaoquListPageComponent,
-    NgIf, NgFor,
-    XiaoquPageComponent,
-    LongPressDirective,
+    LoadingComponent,MatProgressSpinnerModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

@@ -16,7 +16,7 @@ import { DbService } from '../../services/db.service';
 @Component({
   selector: 'app-edit-person',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatDialogModule, MatRadioModule, NgFor, MatCheckboxModule],
+  imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatDialogModule, MatRadioModule, MatCheckboxModule],
   templateUrl: './edit-person.component.html',
   styleUrl: './edit-person.component.scss'
 })

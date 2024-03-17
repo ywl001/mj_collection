@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Building, Hosing, RouteParams, RouterPath } from '../../app-type';
-import {  MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { Building, Hosing, RouteParams, RouterPath, personPageData } from '../../app-type';
+import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from '../../services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,11 +12,12 @@ import { Subscription } from 'rxjs';
 import { DbService } from '../../services/db.service';
 import * as XLSX from 'xlsx';
 import { GlobalService } from '../../global.service';
+import { RoomItemComponent } from '../../room-item/room-item.component';
 
 @Component({
   selector: 'app-building',
   standalone: true,
-  imports: [MatExpansionModule, NgFor, MatButtonModule, NgIf],
+  imports: [MatExpansionModule, MatButtonModule, RoomItemComponent],
   templateUrl: './building-page.component.html',
   styleUrl: './building-page.component.scss'
 })
@@ -24,20 +25,20 @@ export class BuildingPageComponent {
 
   @ViewChildren(MatExpansionPanel) panels: QueryList<MatExpansionPanel>;
 
-  @ViewChild('accordionContainer',{static:false}) accordionContainer: ElementRef;
+  @ViewChild('accordionContainer', { static: false }) accordionContainer: ElementRef;
 
   constructor(
     private router: Router,
-    private dbService:DbService,
+    private dbService: DbService,
     private location: Location,
     private dialog: MatDialog,
     route: ActivatedRoute,
-    private gs:GlobalService) {
+    private gs: GlobalService) {
     if (!gs.user || !gs.current_xiaoqu) {
       this.router.navigate([''])
     }
 
-    const {building,xqName} = gs.parseData(route.snapshot.params['building'])
+    const { building, xqName } = gs.parseData(route.snapshot.params['building'])
     this.building = building;
     this.xqName = xqName;
   }
@@ -53,41 +54,41 @@ export class BuildingPageComponent {
 
   xqName: string;
 
-  getBgColor(item): string {
-    if(item.user_id > 10000){
-      return 'blue'
-    }
-    if (item.result == 1) {
-      return 'lightgreen'
-    } else if (item.result == 0) {
-      if(item.result_message == '不在家')
-        return '#FFBFBF'
-      return 'red'
-    }
-    return 'white'
-  }
+  // getBgColor(item): string {
+  //   if(item.user_id > 10000){
+  //     return 'blue'
+  //   }
+  //   if (item.result == 1) {
+  //     return 'lightgreen'
+  //   } else if (item.result == 0) {
+  //     if(item.result_message == '不在家')
+  //       return '#FFBFBF'
+  //     return 'red'
+  //   }
+  //   return 'white'
+  // }
 
-  getFontColor(item){
-    if(item.user_id>10000){
-      return 'white'
-    }
-    return null;
-  }
+  // getFontColor(item){
+  //   if(item.user_id>10000){
+  //     return 'white'
+  //   }
+  //   return null;
+  // }
 
   private sub1: Subscription
   ngOnInit() {
     console.log('building page init')
-    this.getBuildingWorkInfo().subscribe(res=>{
+    this.getBuildingWorkInfo().subscribe(res => {
       this.buildingInfos = res;
     })
   }
 
   ngAfterViewInit(): void {
     if (this.gs.panelIndex >= 0) {
-      this.getBuildingWorkInfo().subscribe(res=>{
+      this.getBuildingWorkInfo().subscribe(res => {
         this.buildingInfos = res;
         const panelToOpen = this.panels.toArray()[this.gs.panelIndex];
-        panelToOpen.opened.subscribe(res=>{
+        panelToOpen.opened.subscribe(res => {
           this.scrollPosition = this.gs.savedScrollPosition
         })
         panelToOpen.open();
@@ -96,7 +97,7 @@ export class BuildingPageComponent {
   }
 
   ngAfterContentChecked(): void {
-    if(this.accordionContainer && this.hasScrollbar(this.accordionContainer.nativeElement)){
+    if (this.accordionContainer && this.hasScrollbar(this.accordionContainer.nativeElement)) {
       if (this.scrollPosition !== undefined) {
         this.accordionContainer.nativeElement.scrollTop = this.scrollPosition;
         this.scrollPosition = undefined; // Reset scroll position after using it
@@ -119,14 +120,13 @@ export class BuildingPageComponent {
     this.gs.savedScrollPosition = scrollPosition;
   }
 
-  private numToArray(num) {
-    return Array(num).fill(0).map((x, i) => i + 1);
-  }
+  // private numToArray(num) {
+  //   return Array(num).fill(0).map((x, i) => i + 1);
+  // }
 
   onClickUnit(unit) {
-    // console.log(unit)
+    console.log(unit)
     this.gs.panelIndex = unit;
-   
     this.unitRoomNumbers = this.createUnitArray(unit)
   }
 
@@ -141,15 +141,21 @@ export class BuildingPageComponent {
         } else {
           roomNumber = `${unit + 1}-${i + 1}${j + 1}`;
         }
-        let a: any = {};
-        a.room_number = roomNumber;
+        
+        let a: personPageData = {
+          roomNumber:roomNumber,
+          xqName:this.xqName,
+          buildingId:this.building.id,
+          buildingNumber:this.building.building_number,
+          type:''
+        };
 
         for (let k = 0; k < this.buildingInfos.length; k++) {
           const b = this.buildingInfos[k];
           if (b.room_number == roomNumber) {
             a.result = b.result
-            a.result_message = b.result_message
-            a.user_id = b.user_id;
+            a.resultMessage = b.result_message
+            a.userId = b.user_id;
           }
         }
         arr.push(a)
@@ -167,26 +173,8 @@ export class BuildingPageComponent {
     this.location.back()
   }
 
-  onClickRoom(room) {
-    //导航到person-page,building-id,room-number
-    this.gs.current_room_number = room.room_number
-
-    const data:RouteParams={
-      xqName:this.xqName,
-      buildingId:this.building.id,
-      roomNumber:room.room_number,
-      buildingNumber:this.building.building_number
-    }
-    this.router.navigate([RouterPath.person,this.gs.serailizeData(data)])
-  }
-
-  // onEditBuilding() {
-  //   const data = Object.assign({}, this.building, { hosingId: this.hosing.id })
-  //   this.dialog.open(BuildingComponent, { data: this.building })
-  // }
-
-  onExportBuildingPersons(){
-    this.dbService.getUserBuildingPersons(this.building.id).subscribe(res=>{
+  onExportBuildingPersons() {
+    this.dbService.getUserBuildingPersons(this.building.id).subscribe(res => {
       // console.log(res)
       this.saveSheet(res)
     })
@@ -198,7 +186,7 @@ export class BuildingPageComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'people');
 
     /* save to file */
-    let fileName = this.building.building_number+'号楼人员数据'
+    let fileName = this.building.building_number + '号楼人员数据'
     XLSX.writeFile(wb, fileName + ".xlsx");
   }
 

@@ -4,18 +4,23 @@
 </div>
 <div class="line"></div>
 
-<h1>{{hosingName+buildingName+room_number}}</h1>
+<h1>{{xiaoquName+buildingName+room_number}}</h1>
 
 <mat-radio-group [(ngModel)]="residence_type" style="margin-bottom: 30px;" (change)="onChange()">
-    <mat-radio-button class="example-radio-button" *ngFor="let type of residence_types" [value]="type">
-        {{type}}
-    </mat-radio-button>
+    @for (type of residence_types; track $index) {
+        <mat-radio-button class="example-radio-button" [value]="type">
+            {{type}}
+        </mat-radio-button>
+    }
 </mat-radio-group>
 
 <div class="line" style="margin-bottom: 20px;"></div>
 
-<app-people-select (selectedPeople)="onSelectPeople($event)" (showPeoples)="onShowQueryPeoples($event)"></app-people-select>
-<div style="margin-top: 20px;">
-    <app-home-person *ngFor="let item of persons" [person]="item"></app-home-person>
-</div>
+<app-people-select (selectedPeople)="onSelectPeople($event)"
+    (showPeoples)="onShowQueryPeoples($event)"></app-people-select>
 
+<div style="margin-top: 20px;">
+    @for (item of persons; track $index) {
+    <app-home-person [person]="item"></app-home-person>
+    }
+</div>

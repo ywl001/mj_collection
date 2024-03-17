@@ -16,7 +16,7 @@ import { RouterPath } from '../../app-type';
 @Component({
   selector: 'app-buildings',
   standalone: true,
-  imports: [NgFor, MatButtonModule, LongPressDirective],
+  imports: [MatButtonModule, LongPressDirective],
   templateUrl: './xiaoqu-page.component.html',
   styleUrl: './xiaoqu-page.component.scss'
 })

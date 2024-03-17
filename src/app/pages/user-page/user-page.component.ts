@@ -8,12 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { ExportDataComponent } from '../../components/export-data/export-data.component';
 import { DataService, MessageType } from '../../services/data.service';
 import { GlobalService } from '../../global.service';
-import { RouteParams, RouterPath } from '../../app-type';
+import { RouteParams, RouterPath, personPageData } from '../../app-type';
+import { RoomItemComponent } from '../../room-item/room-item.component';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-work-page',
   standalone: true,
-  imports: [NgFor, MatButtonModule,ExportDataComponent],
+  imports: [MatButtonModule,ExportDataComponent,RoomItemComponent],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.scss'
 })
@@ -35,7 +37,23 @@ export class WorkPageComponent {
   }
 
   ngOnInit(): void {
-    this.sql.getUserWork(this.gs.user.id).subscribe(res => {
+    this.sql.getUserWork(this.gs.user.id).pipe(
+      map((res:any[])=>{
+        return res.map(item=>{
+          const a:personPageData = {
+            xqName:item.hosing_name,
+            buildingId:item.building_id,
+            buildingNumber:item.building_number,
+            result:item.result,
+            resultMessage:item.result_message,
+            roomNumber:item.room_number,
+            type:'user',
+            userId:item.user_id
+          }
+          return a;
+        })
+      })
+    ).subscribe(res => {
       console.log(res)
       this.works = res;
     })
@@ -55,17 +73,21 @@ export class WorkPageComponent {
     this.dialog.open(ExportDataComponent)
   }
 
+  // getItem(item){
+
+  // }
+
   onClick(item){
     console.log(item)
     this.gs.userRecord = item;
 
-    const data:RouteParams={
-      xqName:item.hosing_name,
-      buildingId:item.building_id,
-      roomNumber:item.room_number,
-      buildingNumber:item.building_number
-    }
+    // const data:personPageData={
+    //   xqName:item.hosing_name,
+    //   buildingId:item.building_id,
+    //   roomNumber:item.room_number,
+    //   buildingNumber:item.building_number
+    // }
 
-    this.router.navigate([RouterPath.person,this.gs.serailizeData(data)])
+    this.router.navigate([RouterPath.person,this.gs.serailizeData(item)])
   }
 }

@@ -68,6 +68,13 @@ export class DataService {
     this._login.next(user);
   }
 
+  private _loading = new Subject<boolean>();
+  loading$ = this._loading.asObservable();
+  loading(isLoading:boolean) {
+    this._loading.next(isLoading);
+  }
+
+
   // private routeData: any={};
 
   // setRouteData(key:string,data: any): void {
