@@ -1,34 +1,39 @@
-import { NgFor } from '@angular/common';
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DataService, MessageType } from '../../services/data.service';
-import { Location } from '@angular/common';
-import { BuildingComponent } from '../../components/building/building.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription, map } from 'rxjs';
-import { DbService } from '../../services/db.service';
-import { LongPressDirective } from '../../longpress';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { RouterPath } from '../../app-type';
+import { BuildingComponent } from '../../components/building/building.component';
+import { FilterComponent } from '../../components/filter/filter.component';
 import { QcodeComponent } from '../../components/qcode/qcode.component';
 import { GlobalService } from '../../global.service';
-import { RouterPath } from '../../app-type';
+import { LongPressDirective } from '../../longpress';
+import { DataService, MessageType } from '../../services/data.service';
+import { DbService } from '../../services/db.service';
+import { LocalStorgeService } from '../../services/local-storge.service';
 
 @Component({
   selector: 'app-buildings',
   standalone: true,
-  imports: [MatButtonModule, LongPressDirective],
+  imports: [MatButtonModule, LongPressDirective,FilterComponent],
   templateUrl: './xiaoqu-page.component.html',
   styleUrl: './xiaoqu-page.component.scss'
 })
 export class XiaoquPageComponent {
 
   buildings = []
+  filterBuildings = [];
   xiaoquId;
   xiaoquName:string;
+
+  filterFields=['building_number']
   constructor(private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute,
     private dbService: DbService,
+    private local:LocalStorgeService,
     private gs:GlobalService,
     private dialog: MatDialog,
     private location: Location) {
@@ -96,6 +101,10 @@ export class XiaoquPageComponent {
   onCreateQCode() {
     const url = `http://114.115.201.238/caiji/xiaoqu;xqId=${this.xiaoquId};xqName=${this.xiaoquName}`
     this.dialog.open(QcodeComponent, { data: {url:encodeURI(url),name:this.xiaoquName}})
+  }
+
+  onFilterResult(res){
+    this.filterBuildings = res;
   }
 }
 
