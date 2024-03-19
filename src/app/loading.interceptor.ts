@@ -1,16 +1,12 @@
-import { HttpContextToken, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { Observable, finalize, mergeMap } from 'rxjs';
 import { DataService } from './services/data.service';
 import { Injectable } from '@angular/core';
 
-export const SkipLoading = new HttpContextToken<boolean>(() => false);
-
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
 
-  constructor(private dataService: DataService) {
-    console.log('dddddddddddddd')
-  }
+  constructor(private dataService: DataService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // req = this.handleRequest(req);

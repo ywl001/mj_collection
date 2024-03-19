@@ -6,17 +6,20 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { provideLocaleConfig } from './local.config';
 import { LoadingInterceptor } from './loading.interceptor';
+import { loading2Interceptor } from './loading2.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(),withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: LoadingInterceptor,
-      multi: true,
-    },
+    // provideHttpClient(withFetch(),withInterceptorsFromDi()),
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: LoadingInterceptor,
+    //   multi: true,
+    // },
+
+    provideHttpClient(withInterceptors([loading2Interceptor]))
 
   ]
 };
