@@ -1,7 +1,7 @@
-import { HttpContextToken, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { Observable, finalize, mergeMap } from 'rxjs';
-import { DataService } from './services/data.service';
+import { HttpContextToken, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, finalize } from 'rxjs';
+import { DataService } from './services/data.service';
 
 export const SkipLoading = new HttpContextToken<boolean>(() => false);
 
@@ -9,7 +9,6 @@ export const SkipLoading = new HttpContextToken<boolean>(() => false);
 export class LoadingInterceptor implements HttpInterceptor {
 
   constructor(private dataService: DataService) {
-    console.log('dddddddddddddd')
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -48,6 +47,4 @@ export class LoadingInterceptor implements HttpInterceptor {
       observer.next(evt);
     });
   }
-
-
 }

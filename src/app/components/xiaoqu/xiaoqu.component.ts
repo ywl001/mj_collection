@@ -1,16 +1,15 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Inject, Injector } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { DataService, MessageType } from '../../services/data.service';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import toastr from 'toastr';
 import { TableName } from '../../app-type';
+import { DataService, MessageType } from '../../services/data.service';
 import { DbService } from '../../services/db.service';
-import toastr from 'toastr'
 
 @Component({
   selector: 'app-hosing',
@@ -37,7 +36,6 @@ export class XiaoquComponent {
     // console.log(data)
     if (data)
       this.data = data;
-
   }
 
   policeStations = [
@@ -56,7 +54,8 @@ export class XiaoquComponent {
   ]
 
   onSubmit() {
-    if(!this.data.hosing_name || this.data.hosing_name.tirm()==''){
+    console.log(this.data)
+    if(!this.data.hosing_name || this.data.hosing_name.trim()==''){
       toastr.warning('小区名字必须填写')
       return;
     }

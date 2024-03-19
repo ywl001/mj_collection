@@ -1,8 +1,7 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from '../../services/data.service';
 
 @Component({

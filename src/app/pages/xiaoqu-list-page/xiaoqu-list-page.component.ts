@@ -11,17 +11,20 @@ import { DbService } from '../../services/db.service';
 import { RegisterComponent } from '../../components/register/register.component';
 import { GlobalService } from '../../global.service';
 import { RouterPath } from '../../app-type';
+import { FilterComponent } from '../../components/filter/filter.component';
 
 @Component({
   selector: 'app-hosings',
   standalone: true,
-  imports: [MatButtonModule,LongPressDirective,NgIf],
+  imports: [MatButtonModule,LongPressDirective,FilterComponent],
   templateUrl: './xiaoqu-list-page.component.html',
   styleUrl: './xiaoqu-list-page.component.scss'
 })
 export class XiaoquListPageComponent {
 
   hosings: any[] = []
+
+  filterXiaoqu:any[] = [];
 
   isShowRegister:boolean = false;
 
@@ -86,5 +89,9 @@ export class XiaoquListPageComponent {
 
   onRigiste(){
     this.dialog.open(RegisterComponent)
+  }
+
+  onFilter(res){
+    this.filterXiaoqu = res;
   }
 }

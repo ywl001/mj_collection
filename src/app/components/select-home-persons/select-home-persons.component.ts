@@ -1,10 +1,9 @@
 import { NgFor } from '@angular/common';
-import { Component, Inject, ViewChild, viewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import {MatListModule, MatSelectionList} from '@angular/material/list';
+import { MatListModule, MatSelectionList } from '@angular/material/list';
 import { DataService } from '../../services/data.service';
-import { Dialog } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-select-home-persons',
