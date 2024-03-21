@@ -1,0 +1,9 @@
+<mat-form-field style="width: 100%;">
+    <mat-label>过滤</mat-label>
+    <input #keyword matInput [(ngModel)]="filterValue" autocomplete="off" />
+    @if (keyword.value) {
+        <mat-icon style="margin-right: 10px; cursor: pointer" 
+        [svgIcon]="clearIcon" matSuffix matTooltip="clear"
+            (click)="onClear()"></mat-icon>
+    }
+</mat-form-field>

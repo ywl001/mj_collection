@@ -1,9 +1,14 @@
 <div class="root">
     <button mat-flat-button color="primary" class="flex-1" (click)="onAddHosing()">添加小区</button>
-    <button mat-flat-button color="primary" class="flex-1" (click)="onRigiste()" *ngIf="isShowRegister">注册</button>
+    @if (isShowRegister) {
+        <button mat-flat-button color="primary" class="flex-1" (click)="onRigiste()">注册</button>
+    }
     <div class="line"></div>
+    <div class="w100">
+        <app-filter class="w100" [data]="this.hosings" (result)="onFilter($event)"></app-filter>
+    </div>
 
-    @for (item of hosings; track $index) {
+    @for (item of filterXiaoqu; track $index) {
         <div class="rounded-rectangle" (click)="onSelectHosing(item)" longPress (mouseLongPress)="onLongPress(item)">
             {{item.hosing_name}}
         </div>
