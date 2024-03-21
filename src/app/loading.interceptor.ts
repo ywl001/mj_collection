@@ -8,7 +8,12 @@ export const SkipLoading = new HttpContextToken<boolean>(() => false);
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) { 
+    console.log('lan jie qi constructor')
+  }
+
+  private reqTimes = 0;
+  private resTimes = 0;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // req = this.handleRequest(req);
@@ -26,11 +31,17 @@ export class LoadingInterceptor implements HttpInterceptor {
     // }
 
     this.dataService.loading(true);
+    this.reqTimes++;
+    // console.log('start busy')
 
     return next.handle(req).pipe(
       finalize(() => {
         // Turn off the loading spinner
-        this.dataService.loading(false);
+        this.resTimes++;
+        if(this.resTimes == this.reqTimes){
+          // console.log('end busy')
+          this.dataService.loading(false);
+        }
       })
     );
   }

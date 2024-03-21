@@ -9,7 +9,7 @@
     <h1 style="margin-top: 10px;">{{xiaoquName}}</h1>
     <div class="line"></div>
     <div class="w100">
-        <app-filter [data]="buildings" [fields]="filterFields" (result)="onFilterResult($event)"></app-filter>
+        <app-filter [data]="buildings" [fields]="filterFields" [localKey]="'buildingFilter'" (result)="onFilterResult($event)"></app-filter>
     </div>
 
     @for (item of filterBuildings; track $index) {

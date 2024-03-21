@@ -21,9 +21,9 @@ export class FilterComponent {
 
   @Input() data: any[] = [];
 
-  @Input() fields:string[]=[];
+  @Input() fields: string[] = [];
 
-  @Input() localKey:string
+  @Input() localKey: string
 
   @Output() result = new EventEmitter()
   @Output() value = new EventEmitter()
@@ -36,9 +36,9 @@ export class FilterComponent {
   }
   public set filterValue(value: string) {
     this._filterValue = value;
-    this.localStorage.set('filterXq', value)
+    this.localStorage.set(this.localKey, value)
     this.value.emit(value)
-    this.result.emit(this.filter(this.getFilterData(), this.filterValue))
+    this.result.emit(this.filter(this.data, this.filterValue))
   }
 
   constructor(
@@ -53,13 +53,13 @@ export class FilterComponent {
   }
 
   ngOnInit() {
-    if (this.localStorage.get('filterXq')) {
-      this.filterValue = this.localStorage.get('filterXq')
+    if (this.localStorage.get(this.localKey)) {
+      this.filterValue = this.localStorage.get(this.localKey)
     }
   }
 
   ngOnChanges() {
-    this.result.emit(this.filter(this.getFilterData(), this.filterValue))
+    this.result.emit(this.filter(this.data, this.filterValue))
   }
 
   private filter(arr: any[], val: string): any[] {
@@ -68,43 +68,47 @@ export class FilterComponent {
       const vals = val.split(' ');
       let res = false;
 
-        if(typeof(v)=='string'){
+      const objectKey = this.fields.length == 0 ? Object.keys(item) : Object.keys(item).filter(key => this.fields.indexOf(key) > -1)
+
+      objectKey.forEach(key => {
+        if (typeof (item[key]) == 'string') {
+          const value = item[key];
           for (let i = 0; i < vals.length; i++) {
             const val = vals[i];
             res =
               res ||
-              v?.indexOf(val) >= 0 ||
-              this.getFirstPy(v)?.indexOf(val) >= 0 ||
-              this.getPy(v)?.indexOf(val) >= 0
+              value?.indexOf(val) > -1 ||
+              this.getFirstPy(value)?.indexOf(val) > -1 ||
+              this.getPy(value)?.indexOf(val) > -1
           }
         }
-        console.log(res)
+        // console.log(res)
       })
       return res
     });
   }
 
-  private getFilterData(){
-    if(this.fields.length == 0){
-      return this.data
-    }else{
-      console.log(this.fields)
-      return this.data.map(val=> this.fields.reduce((acc, prop) => ({ ...acc, [prop]: val[prop] }), {}))
-    }
-  }
+  // private getFilterData() {
+  //   if (this.fields.length == 0) {
+  //     return this.data
+  //   } else {
+  //     console.log(this.fields)
+  //     return this.data.map(val => this.fields.reduce((acc, prop) => ({ ...acc, [prop]: val[prop] }), {}))
+  //   }
+  // }
 
   onClear() {
     this.filterValue = '';
   }
 
   private getFirstPy(hanzi: string) {
-    if(hanzi)
+    if (hanzi)
       return pinyin(hanzi, { pattern: 'first', toneType: 'none', type: 'array' }).join('')
     return '';
   }
 
   private getPy(hanzi: string) {
-    if(hanzi)
+    if (hanzi)
       return pinyin(hanzi, { pattern: 'pinyin', toneType: 'none', type: 'array' }).join('')
     return ''
   }

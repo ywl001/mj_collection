@@ -34,3 +34,9 @@
   width: 100%; /* 确保 mat-expansion-panel 充满父容器 */
 }
 
+.mat-expansion-panel-header.mat-expanded,
+.mat-expansion-panel-header.mat-expanded:hover {
+  background: #0070c040;
+}
+
+

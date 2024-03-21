@@ -79,6 +79,7 @@ export class HomePersonComponent {
         console.log(this.person.pb_id)
         this.dbService.delete(TableName.person_building,this.person.pb_id).subscribe(res=>{
           console.log(res)
+          //发消息删除后刷新人员
           this.dataService.deleteBuildingPerson(this.person.id)
         })
       } 

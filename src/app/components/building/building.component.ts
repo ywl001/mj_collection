@@ -25,10 +25,13 @@ export class BuildingComponent {
 
   data: Building = {};
 
+  //单元数
   countUint
 
+  //每单元户数
   countHome
 
+  //单元数组
   unitArray = ''
 
   hosingId
@@ -78,7 +81,7 @@ export class BuildingComponent {
         const tableData = Object.assign({}, this.data, { unit_home: this.getUnitData() })
         this.dbService.update(TableName.collect_building, tableData, this.data.id).subscribe(res => {
           console.log(res)
-          if(res){
+          if (res) {
             this.dataService.sendMessage(MessageType.editBuilding);
             toastr.info('编辑楼栋成功')
           }
@@ -98,9 +101,10 @@ export class BuildingComponent {
 
   private checkData() {
     if (!this.data.building_number || this.data.building_number.length == 0) {
+      toastr.warning('楼号必须填写')
       return false;
     }
-    if (!this.isPositiveInteger(this.data.floor)) {
+    if (!this.data.floor || !this.isPositiveInteger(this.data.floor)) {
       //单元数或单元户数必须正整数
       toastr.warning('楼层数必须正整数')
       return false;
@@ -108,29 +112,33 @@ export class BuildingComponent {
     if (!this.isNormal) {
       const arr = this.unitToArray()
       console.log(arr)
-      if (!this.isNumericArray(arr)) {
+      if (!this.unitArray || !this.isNumericArray(arr)) {
         toastr.warning('单元必须纯数字')
         return false;
       }
     } else {
-      if (!this.isPositiveInteger(this.countHome)) {
+      if (!this.countHome || !this.isPositiveInteger(this.countHome)) {
         //单元数或单元户数必须正整数
-        toastr.warning('单元数或单元户数必须正整数')
+        toastr.warning('每单元每层户数必须是正整数')
+        return false;
+      }
+      if (!this.countUint || !this.isPositiveInteger(this.countUint)) {
+        toastr.warning('单元数必须是正整数')
         return false;
       }
     }
     return true;
   }
 
-  private unitToArray(){
+  private unitToArray() {
     //转成数组前去除两端空格，如果中间有两个空格变成一个空格，然后按空格分割成数组
-    return this.unitArray.trim().replace(/ +/g, ' ').split(' ').map(v=>parseInt(v));
+    return this.unitArray.trim().replace(/ +/g, ' ').split(' ').map(v => parseInt(v));
   }
 
   //是否纯数字的数组
-  private isNumericArray(arr:any[]) {
-    return arr.every(element=> {
-      console.log(element,!isNaN(element))
+  private isNumericArray(arr: any[]) {
+    return arr.every(element => {
+      console.log(element, !isNaN(element))
       return !isNaN(element);
     });
   }

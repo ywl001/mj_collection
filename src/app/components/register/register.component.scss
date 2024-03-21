@@ -13,9 +13,7 @@
     margin-bottom: 5px;
 }
 
-.form input[type="text"],
-.form input[type="email"],
-.form input[type="password"] {
+.form input {
     width: calc(100% - 12px);
     padding: 8px;
     margin-bottom: 15px;

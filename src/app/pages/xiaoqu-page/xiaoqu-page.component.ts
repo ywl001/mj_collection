@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RouterPath } from '../../app-type';
+import { Building, RouterPath, TableName } from '../../app-type';
 import { BuildingComponent } from '../../components/building/building.component';
 import { FilterComponent } from '../../components/filter/filter.component';
 import { QcodeComponent } from '../../components/qcode/qcode.component';
@@ -13,6 +13,8 @@ import { LongPressDirective } from '../../longpress';
 import { DataService, MessageType } from '../../services/data.service';
 import { DbService } from '../../services/db.service';
 import { LocalStorgeService } from '../../services/local-storge.service';
+import Swal from 'sweetalert2';
+import toastr from 'toastr';
 
 @Component({
   selector: 'app-buildings',
@@ -77,13 +79,58 @@ export class XiaoquPageComponent {
       })
   }
 
-  onSelectBuilding(building: any) {
+  private clickCount = 0;
+  private clickTimer
+
+  onSelectBuilding(building: Building) {
+    this.clickCount++
+    if (this.clickCount === 1) {
+      this.clickTimer = setTimeout(() => {
+        if (this.clickCount === 1) {
+          this.toBuildingPage(building)
+          console.log('click');
+        }
+        this.clickCount = 0;
+      }, 300); // Adjust this time according to your needs
+    } else if (this.clickCount === 2) {
+      clearTimeout(this.clickTimer);
+      this.clickCount = 0;
+      console.log('double click');
+      this.delBuilding(building)
+    }
+  }
+
+  private toBuildingPage(building:Building){
     this.gs.current_building = building;
     this.gs.panelIndex = -1;
     this.gs.savedScrollPosition = 0;
 
     this.router.navigate([RouterPath.building,this.gs.serailizeData({building:building,xqName:this.xiaoquName})])
   }
+
+  private delBuilding(building:Building){
+    Swal.fire({
+      title: "确定要删除楼栋吗?",
+      showCancelButton: true,
+      confirmButtonText: "确定",
+      cancelButtonText:'取消',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dbService.getBuildingWorkInfo(building.id).subscribe(res=>{
+          if(res && res.length> 0){
+            toastr.warning('楼栋下关联有人员，无法删除')
+          }else{
+            this.dbService.delete(TableName.collect_building,building.id).subscribe(res=>{
+              if(res){
+                this.getBuildings(this.xiaoquId);
+              }
+            })
+          }
+        })
+      } 
+    });
+  }
+
   onBack() {
     this.location.back()
   }

@@ -28,7 +28,7 @@ export interface Work {
     use_for?:string
 }
 
-export interface Hosing {
+export interface Xiaoqu {
     id?:number
     station?:string
     community?:string

@@ -40,7 +40,7 @@ export class DbService {
     return this.exec(PhpMethodNames.SELECT_HOSINGS, null)
   }
 
-  getHosingBuildings(hosing_id: string) {
+  getHosingBuildings(hosing_id: number) {
     return this.exec(PhpMethodNames.GET_HOSING_BUILDINGS, hosing_id).pipe(
       map(buildings => buildings.map(building => {
         building.unit_home = JSON.parse(building.unit_home);

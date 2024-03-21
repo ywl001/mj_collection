@@ -26,9 +26,10 @@
         </mat-form-field>
     }@else {
         <mat-form-field>
-            <mat-label>顺序填写单层单元户数:</mat-label>
+            <mat-label>顺序填写单元单层户数，空格分隔</mat-label>
             <input matInput [(ngModel)]="unitArray">
         </mat-form-field>
+        <p>例如 2 3 3 2，表示四个单元每单元的户数 </p>
     }
 </div>
 

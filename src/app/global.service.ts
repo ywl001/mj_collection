@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Hosing, Building, User } from './app-type';
+import { Xiaoqu, Building, User } from './app-type';
 import { People } from './Person';
 import { DataService } from './services/data.service';
 import { LocalStorgeService } from './services/local-storge.service';
@@ -9,7 +9,7 @@ import { LocalStorgeService } from './services/local-storge.service';
 })
 export class GlobalService {
 
-  current_xiaoqu: Hosing;
+  current_xiaoqu: Xiaoqu;
   current_building: Building;
   current_room_number: string;
 

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Building, Hosing, RouteParams, RouterPath, personPageData } from '../../app-type';
+import { Building, Xiaoqu, RouteParams, RouterPath, personPageData } from '../../app-type';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { NgFor, NgIf } from '@angular/common';
 import { DataService, MessageType } from '../../services/data.service';
@@ -40,6 +40,7 @@ export class BuildingPageComponent {
 
     const { building, xqName } = gs.parseData(route.snapshot.params['building'])
     this.building = building;
+    console.log(this.building)
     this.xqName = xqName;
   }
 
@@ -166,6 +167,7 @@ export class BuildingPageComponent {
   }
 
   private getBuildingWorkInfo() {
+    console.log(this.building.id)
     return this.dbService.getBuildingWorkInfo(this.building.id)
   }
 
